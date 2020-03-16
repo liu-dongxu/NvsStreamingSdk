@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-  s.name         = "NvsStreamingSDK"
+  s.name         = "NvsStreaming_Sdk"
   s.version      = "2.13.3"
   s.summary      = "Meishe SDK"
   s.description  = <<-DESC
@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
                    DESC
 
   s.homepage     = "https://www.meishesdk.com"
-  s.license      = { :type => "Meishe SDK License", :file => "LICENSE.md" }
+  s.license      = { :type => "MIT", :file => "LICENSE" }
   s.author       = { "liu-dongxu" => "liu_dongxu@cdv.com" }
   s.platform     = :ios, "8.0"
   s.source       = { :git => "https://github.com/liu-donngnxu/NvsStreamingSdk.git", :tag => s.version}
