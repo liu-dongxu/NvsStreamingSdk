@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "NvsStreaming_Sdk"
-  s.version      = "2.13.3"
+  s.version      = "2.13.4ARScene-ST"
   s.summary      = "Meishe SDK"
   s.description  = <<-DESC
                      This is Meishe SDK
@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.license      = { :type => "MIT", :file => "LICENSE" }
   s.author       = { "liu-dongxu" => "liu_dongxu@cdv.com" }
   s.platform     = :ios, "8.0"
-  s.source       = { :git => "https://github.com/liu-donngnxu/NvsStreamingSdk.git", :tag => s.version}
+  s.source       = { :git => "https://github.com/liu-dongxu/NvsStreamingSdk.git", :tag => s.version}
   s.source_files = "lib/**/NvStreamingSdkCore.framework/Headers/*.h"
   s.public_header_files = "lib/**/NvStreamingSdkCore.framework/Headers/*.h"
   s.ios.vendored_frameworks = "lib/**/NvStreamingSdkCore.framework"
