@@ -306,10 +306,10 @@ NVS_EXPORT @interface NvsFx : NvsObject
  *  \brief 获取局部滤镜的控制范围
  *  \return 返回局部滤镜的控制范围，点的坐标在NDC坐标系中
  *  \endif
- *  \sa setRegiona:
+ *  \sa setRegion:
  *  \since 2.14.0
  */
-- (NSArray *)getRegin;
+-(NSArray *)getRegion;
 
 /*! \if ENGLISH
  *  \brief Sets the region of this regional filter.
