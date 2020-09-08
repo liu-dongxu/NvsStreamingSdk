@@ -185,6 +185,23 @@ NVS_EXPORT @interface NvsSmartCutParser : NSObject
 + (void)close;
 
 /*! \if ENGLISH
+ *  \brief Initializes the human body detection mechanism.
+ *  \param modelFilePath Path of the model file
+ *  \param licenseFilePath Path of the license file
+ *  \param features human detection flag field..
+ *  \else
+ *  \brief 初始化人体检测机制
+ *  \param modelFilePath 人脸模型文件路径
+ *  \param licenseFilePath 授权文件路径
+ *  \param features 人体检测特征标志字段.
+ *  \endif
+ *  \since 2.15.0
+*/
++ (BOOL)initHumanDetection:(NSString *)modelFilePath
+           licenseFilePath:(NSString *)licenseFilePath
+                  features:(int)features;
+
+/*! \if ENGLISH
  *  \brief Gets the instance of smart cut object (only can use this after initialization)
  *  \return Returns the smart cut object instance.
  *  \else

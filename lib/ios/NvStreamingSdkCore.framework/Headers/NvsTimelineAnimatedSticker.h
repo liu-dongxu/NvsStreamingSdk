@@ -406,5 +406,35 @@ NVS_EXPORT @interface NvsTimelineAnimatedSticker : NvsFx
 */
 - (void)getVolumeGain:(float *)leftVolumeGain rightVolumeGain:(float *)rightVolumeGain;
 
+/*! \if ENGLISH
+ *  \brief Set the sticker opacity.
+ *  \param opacity The opacity of sticker
+ *  \else
+ *  \brief 设置贴纸透明度
+ *  \param value 贴纸透明度
+ *  \endif
+ *  \sa getOpacity
+*/
+- (void)setOpacity:(float)opacity;
+
+/*! \if ENGLISH
+ *  \brief Get the sticker opacity.
+ *  \return Return the opacity.
+ *  \else
+ *  \brief 获取贴纸透明度
+ *  \return 返回贴纸透明度
+ *  \endif
+ *  \sa setOpacity:
+*/
+- (float)getOpacity;
+
+/*! \if ENGLISH
+ *  \brief Set the sticker KeyFrameTime.
+ *  \else
+ *  \brief 设置贴纸的关键帧时间
+ *  \endif
+*/
+- (void)setCurrentKeyFrameTime:(int64_t)time;
+
 @end
 

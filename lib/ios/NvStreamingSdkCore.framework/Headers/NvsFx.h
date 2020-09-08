@@ -18,11 +18,35 @@
 #import "NvsObject.h"
 #import "NvsCommonDef.h"
 
+/*! \if ENGLISH
+ *  \brief Key frame find mode
+ *  \else
+ *  \brief 关键帧查找方式
+ *  \endif
+*/
+typedef enum {
+    NvsKeyFrameFindModeFlag_Before = 1,            //!< \if ENGLISH find key frame before current time \else 查找当前时间点之前的关键帧\endif
+    NvsKeyFrameFindModeFlag_After = 2,             //!< \if ENGLISH find key frame after current time \else 查找当前时间点之后的关键帧\endif
+} NvsKeyFrameFindModeFlag;
+
+/*! \if ENGLISH
+ *  \brief Region Coordinate System Type
+ *  \else
+ *  \brief 局部特效坐标系类型
+ *  \endif
+*/
+typedef enum {
+    NvsRegionCoordinateSystemType_NDC = 0,              //!< \if ENGLISH NDC coordinate system \else NDC坐标系\endif
+    NvsRegionCoordinateSystemType_Timeline = 1          //!< \if ENGLISH timeline coordinate system \else timeline坐标系 \endif
+} NvsRegionCoordinateSystemType;
+
+@class NvsArbitraryData;
 @class NvsFxDescription;
 @class NvsParticleSystemContext;
 @class NvsARFaceContext;
 @class NvsPaintingEffectContext;
 @class NvsARSceneManipulate;
+@class NvsMaskRegionInfo;
 
 
 /*! \if ENGLISH
@@ -70,6 +94,36 @@ NVS_EXPORT @interface NvsFx : NvsObject
 - (int)getIntVal:(NSString *)fxParam;
 
 /*! \if ENGLISH
+    *  \brief Sets the integer parameter of NvsFx.
+    *  \param fxParam The type of the NvsFx's integer parameter. Please refer to [PARAM_TYPE_INT] (@ref PARAM_TYPE).
+    *  \param val An integer value.
+    *  \param time point time (In microseconds).
+    *  \else
+    *  \brief 设置特效的整数参数值
+    *  \param fxParam 特效的整数参数的类型。请参见[PARAM_TYPE_INT] (@ref PARAM_TYPE)
+    *  \param val 整数
+    *  \param time 获取值的时间点 (单位为微秒).
+    *  \endif
+    *  \sa getIntVal
+   */
+- (void)setIntValAtTime:(NSString *)fxParam val:(int)val time:(int64_t)time;
+
+/*! \if ENGLISH
+ *  \brief Gets the integer parameter of NvsFx.
+ *  \param fxParam The type of the NvsFx's integer parameter. Please refer to [PARAM_TYPE_INT].
+ *  \param time point time (In microseconds).
+ *  \return Returns the integer value.
+ *  \else
+ *  \brief 获得特效的整数参数值
+ *  \param fxParam 特效的整数参数的类型。请参见[PARAM_TYPE_INT] (@ref PARAM_TYPE)
+ *  \param time 获取值的时间点 (单位为微秒).
+ *  \return 返回获得的整数值
+ *  \endif
+ *  \sa setIntVal
+*/
+- (int)getIntValAtTime:(NSString *)fxParam time:(int64_t)time;
+
+/*! \if ENGLISH
 *   \brief Sets effect parameter of float type.
 *   \param fxParam  Effect parameter float type,please refer to[NVS_PARAM_TYPE_FLOAT] (@ref EFFECT_PARAM_TYPE)
 *   \param val Float value
@@ -94,6 +148,36 @@ NVS_EXPORT @interface NvsFx : NvsObject
 *   \sa setFloatVal:val:
 */
 - (double)getFloatVal:(NSString *)fxParam;
+
+/*! \if ENGLISH
+ *  \brief Sets the float parameter of NvsFx.
+ *  \param fxParam The type of the NvsFx's float parameter. Please refer to [PARAM_TYPE_FLOAT].
+ *  \param val An float value.
+ *  \param time point time (In microseconds).
+ *  \else
+ *  \brief 设置特效的浮点值参数值
+ *  \param fxParam 特效的浮点数参数的类型。请参见[PARAM_TYPE_FLOAT] (@ref PARAM_TYPE)
+ *  \param val 浮点值
+ *  \param time 获取值的时间点 (单位为微秒).
+ *  \endif
+ *  \sa getFloatVal
+*/
+- (void)setFloatValAtTime:(NSString *)fxParam val:(double)val time:(int64_t)time;
+
+/*! \if ENGLISH
+*  \brief Gets the float parameter of NvsFx.
+*  \param fxParam The type of the NvsFx's float parameter. Please refer to [PARAM_TYPE_FLOAT].
+*  \param time point time (In microseconds).
+*  \return Returns the double value.
+*  \else
+*  \brief 获得特效浮点值参数值
+*  \param fxParam 特效的浮点数参数的类型。请参见[PARAM_TYPE_FLOAT] (@ref PARAM_TYPE)
+*  \param time 在某个时间点获取值 (单位为微秒).
+*  \return 返回获得的double值
+*  \endif
+*  \sa setFloatVal
+*/
+- (double)getFloatValAtTime:(NSString *)fxParam time:(int64_t)time;
 
 /*! \if ENGLISH
 *   \brief Sets effect parameter of BOOL type.
@@ -122,6 +206,36 @@ NVS_EXPORT @interface NvsFx : NvsObject
 - (BOOL)getBooleanVal:(NSString *)fxParam;
 
 /*! \if ENGLISH
+*  \brief Sets the boolean parameter of NvsFx.
+*  \param fxParam The type of the NvsFx's float parameter. Please refer to [PARAM_TYPE_BOOL].
+*  \param val A boolean value.
+*  \param time point time (In microseconds).
+*  \else
+*  \brief 设置特效布尔值参数值
+*  \param fxParam 特效的布尔值参数的类型。请参见[PARAM_TYPE_BOOL] (@ref PARAM_TYPE)
+*  \param val 布尔值
+*  \param time 在某个时间点获取值 (单位为微秒).
+*  \endif
+*  \sa getBooleanVal
+*/
+- (void)setBooleanValAtTime:(NSString *)fxParam val:(BOOL)val time:(int64_t)time;
+
+/*! \if ENGLISH
+*  \brief Gets the boolean parameter of NvsFx.
+*  \param fxParam The type of the NvsFx's float parameter. Please refer to [PARAM_TYPE_BOOL].
+*  \param time point time (In microseconds).
+*  \return Returns the boolean value.
+*  \else
+*  \brief 获得特效的布尔值参数值
+*  \param fxParam 特效的布尔值参数的类型。请参见[PARAM_TYPE_BOOL] (@ref PARAM_TYPE)
+*  \param time 在某个时间点获取值 (单位为微秒).
+*  \return 返回获得的布尔值
+*  \endif
+*  \sa setBooleanVal
+*/
+- (BOOL)getBooleanValAtTime:(NSString *)fxParam time:(int64_t)time;
+
+/*! \if ENGLISH
 *   \brief Sets effect parameter of string type.
 *   \param fxParam Effect parameter string type,please refer to[NVS_PARAM_TYPE_STRING] (@ref EFFECT_PARAM_TYPE)
 *   \param val String value
@@ -146,6 +260,36 @@ NVS_EXPORT @interface NvsFx : NvsObject
 *   \sa setStringVal:val:
 */
 - (NSString *)getStringVal:(NSString *)fxParam;
+
+/*! \if ENGLISH
+*  \brief Sets the string parameter of NvsFx.
+*  \param fxParam The type of the NvsFx's string parameter. Please refer to [PARAM_TYPE_STRING].
+*  \param val A string value.
+*  \param time point time (In microseconds).
+*  \else
+*  \brief 设置特效字符串参数值
+*  \param fxParam 特效的字符串参数的类型。请参见[PARAM_TYPE_STRING] (@ref PARAM_TYPE)
+*  \param val 字符串
+*  \param time 关键帧的时间 (单位为微秒).
+*  \endif
+*  \sa getStringVal
+*/
+- (void)setStringValAtTime:(NSString *)fxParam val:(NSString *)val time:(int64_t)time;
+
+/*! \if ENGLISH
+*  \brief Gets the string parameter of NvsFx.
+*  \param fxParam The type of the NvsFx's string parameter. Please refer to [PARAM_TYPE_STRING].
+*  \param time current time (In microseconds).
+*  \return Returns the string value.
+*  \else
+*  \brief 获得特效字符串参数值
+*  \param fxParam 特效的字符串参数的类型。请参见[PARAM_TYPE_STRING] (@ref PARAM_TYPE)
+*  \param time 获取值的时间 (单位为微秒).
+*  \return 返回获得的字符串
+*  \endif
+*  \sa setStringVal
+*/
+- (NSString *)getStringValAtTime:(NSString *)fxParam time:(int64_t)time;
 
 /*! \if ENGLISH
 *   \brief Sets effect parameter of color type.
@@ -174,6 +318,36 @@ NVS_EXPORT @interface NvsFx : NvsObject
 - (NvsColor)getColorVal:(NSString *)fxParam;
 
 /*! \if ENGLISH
+*  \brief Sets the color parameter of NvsFx.
+*  \param fxParam The type of the NvsFx's color parameter. Please refer to [PARAM_TYPE_COLOR].
+*  \param val [NvsColor] (@ref NvsColor) Customized color object.
+*  \param time point time (In microseconds).
+*  \else
+*  \brief 设置特效颜色值参数值
+*  \param fxParam 特效的颜色参数的类型。请参见[PARAM_TYPE_COLOR] (@ref PARAM_TYPE)
+*  \param val [NvsColor] (@ref NvsColor)自定义颜色对象
+*  \param time 获取值的时间点 (单位为微秒).
+*  \endif
+*  \sa getColorVal
+*/
+- (void)setColorValAtTime:(NSString *)fxParam val:(NvsColor *)val time:(int64_t)time;
+
+/*! \if ENGLISH
+*  \brief Gets the color parameter of NvsFx.
+*  \param fxParam The type of the NvsFx's color parameter. Please refer to [PARAM_TYPE_COLOR].
+*  \param time point time (In microseconds).
+*  \return Returns the customized color object[NvsColor].
+*  \else
+*  \brief 获得特效颜色值参数值
+*  \param fxParam 特效的颜色参数的类型。请参见[PARAM_TYPE_COLOR] (@ref PARAM_TYPE)
+*  \param time 获取值的时间点 (单位为微秒).
+*  \return 返回获得的自定义颜色[NvsColor] (@ref NvsColor)对象
+*  \endif
+*  \sa setColorVal
+*/
+- (NvsColor)getColorValAtTime:(NSString *)fxParam time:(int64_t)time;
+
+/*! \if ENGLISH
 *   \brief Sets effect parameter of 2D coordinates type.
 *   \param fxParam Effect parameter 2D coordinates type,please refer to[NVS_PARAM_TYPE_POSITION2D] (@ref EFFECT_PARAM_TYPE)
 *   \param val 2D coordinates value
@@ -198,6 +372,38 @@ NVS_EXPORT @interface NvsFx : NvsObject
 *   \sa setPosition2DVal:val:
 */
 - (NvsPosition2D)getPosition2DVal:(NSString *)fxParam;
+
+/*! \if ENGLISH
+*  \brief Sets the two dimentional coordinates parameter of NvsFx.
+*  \param fxParam The type of the NvsFx's two dimentional coordinates parameter. Please refer to [PARAM_TYPE_POSITION2D].
+*  \param time point time (In microseconds).
+*  \param val Two dimentional coordinates object[NvsPosition2D].
+*  \else
+*  \brief 设置特效二维坐标参数值
+*  \param fxParam 特效的二维坐标参数的类型。请参见[PARAM_TYPE_POSITION2D] (@ref PARAM_TYPE)
+*  \param val 二维坐标[NvsPosition2D] (@ref NvsPosition2D)对象
+*  \param time 关键帧的时间 (单位为微秒).
+*  \endif
+*  \sa getPosition2DVal
+*  \sa setPosition3DVal
+*/
+- (void)setPosition2DValAtTime:(NSString *)fxParam val:(NvsPosition2D *)val time:(int64_t)time;
+
+/*! \if ENGLISH
+*  \brief Gets the two dimentional coordinates parameter of NvsFx.
+*  \param fxParam The type of the NvsFx's two dimentional coordinates parameter. Please refer to [PARAM_TYPE_POSITION2D].
+*  \param time current time (In microseconds).
+*  \return Returns the two dimentional coordinates object[NvPosition2D].
+*  \else
+*  \brief 获得特效二维坐标参数值
+*  \param fxParam 特效的二维坐标参数的类型。请参见[PARAM_TYPE_POSITION2D] (@ref PARAM_TYPE)
+*  \param time 关键帧的时间 (单位为微秒).
+*  \return 返回获得的二维坐标[NvPosition2D] (@ref NvsPosition2D)对象
+*  \endif
+*  \sa setPosition2DVal
+*  \sa getPosition3DVal
+*/
+- (NvsPosition2D)getPosition2DValAtTime:(NSString *)fxParam time:(int64_t)time;
 
 /*! \if ENGLISH
 *   \brief Sets effect parameter of 3D coordinates type.
@@ -226,6 +432,38 @@ NVS_EXPORT @interface NvsFx : NvsObject
 - (NvsPosition3D)getPosition3DVal:(NSString *)fxParam;
 
 /*! \if ENGLISH
+*  \brief Sets the three dimentional coordinates parameter of NvsFx.
+*  \param fxParam The type of the NvsFx's three dimentional coordinates parameter. Please refer to [PARAM_TYPE_POSITION3D].
+*  \param val Three dimentional coordinates object[NvsPosition3D].
+*  \param time current time (In microseconds).
+*  \else
+*  \brief 设置特效三维坐标参数值
+*  \param fxParam 特效的三维坐标参数的类型。请参见[PARAM_TYPE_POSITION3D] (@ref PARAM_TYPE)
+*  \param val 三维坐标[NvsPosition3D] (@ref NvsPosition3D)对象
+*  \param time 关键帧的时间 (单位为微秒).
+*  \endif
+*  \sa getPosition3DVal
+*  \sa setPosition2DVal
+*/
+- (void)setPosition3DValAtTime:(NSString *)fxParam val:(NvsPosition3D *)val time:(int64_t)time;
+
+/*! \if ENGLISH
+*  \brief Gets the three dimentional coordinates parameter of NvsFx.
+*  \param fxParam The type of the NvsFx's three dimentional coordinates parameter. Please refer to [PARAM_TYPE_POSITION3D].
+*  \param time current time (In microseconds).
+*  \return Returns the three dimentional coordinates object[NvPosition3D].
+*  \else
+*  \brief 获得特效三维坐标参数值
+*  \param fxParam 特效的三维坐标参数的类型。请参见[PARAM_TYPE_POSITION3D] (@ref PARAM_TYPE)
+*  \param time 关键帧的时间 (单位为微秒).
+*  \return 返回获得的三维坐标[NvsPosition3D] (@ref NvsPosition3D)对象
+*  \endif
+*  \sa setPosition3DVal
+*  \sa getPosition2DVal
+*/
+- (NvsPosition3D)getPosition3DValAtTime:(NSString *)fxParam time:(int64_t)time;
+
+/*! \if ENGLISH
 *   \brief Sets effect parameter of menu type.
 *   \param fxParam Effect parameter menu type,please refer to[NVS_PARAM_TYPE_MENU] (@ref EFFECT_PARAM_TYPE)
 *   \param val Menu value
@@ -252,6 +490,146 @@ NVS_EXPORT @interface NvsFx : NvsObject
 - (NSString *)getMenuVal:(NSString *)fxParam;
 
 /*! \if ENGLISH
+*  \brief Sets the menu parameter of NvsFx.
+*  \param fxParam The type of the NvsFx's menu parameter. Please refer to [PARAM_TYPE_MENU].
+*  \param val A string value.
+*  \param time current time (In microseconds).
+*  \else
+*  \brief 设置特效菜单参数值
+*  \param fxParam 特效的菜单参数的类型。请参见[PARAM_TYPE_MENU] (@ref PARAM_TYPE)
+*  \param val 字符串
+*  \param time 关键帧的时间 (单位为微秒).
+*  \endif
+*  \sa getMenuVal
+*/
+- (void)setMenuValAtTime:(NSString *)fxParam val:(NSString *)val time:(int64_t)time;
+
+/*! \if ENGLISH
+*  \brief Gets the menu parameter of NvsFx.
+*  \param fxParam The type of the NvsFx's menu parameter. Please refer to [PARAM_TYPE_MENU].
+*  \param time current time (In microseconds).
+*  \return Returns the menu value of NvsFx.
+*  \else
+*  \brief 获得特效菜单参数值
+*  \param fxParam 特效的菜单参数的类型。请参见[PARAM_TYPE_MENU] (@ref PARAM_TYPE)
+*  \param time 关键帧的时间 (单位为微秒).
+*  \return 返回获得的菜单
+*  \endif
+*  \sa setMenuVal
+*/
+- (NSString *)getMenuValAtTime:(NSString *)fxParam time:(int64_t)time;
+
+/*! \if ENGLISH
+*   \brief Sets the effect parameter of custom type.
+*   \param fxParam The type of custom data parameter for the effect
+*   \param val NvsArbitraryData data value
+*   \else
+*   \brief 设置自定义数据参数值
+*   \param fxParam 特效自定义数据参数的类型
+*   \param val NvsArbitraryData数据值
+*   \endif
+*/
+- (void)setArbDataVal:(NSString *)fxParam val:(NvsArbitraryData *)val;
+
+/*! \if ENGLISH
+*   \brief Gets the effect parameter of custom type.
+*   \param fxParam The type of custom data parameter for the effect
+*   \return Returns the custom data of NvsFx.
+*   \else
+*   \brief 设置自定义数据参数值
+*   \param fxParam 特效自定义数据参数的类型
+*   \param val NvsArbitraryData数据值
+*   \return 返回获得的自定义数据参数值.
+*   \endif
+*/
+- (NvsArbitraryData *)getArbDataVal:(NSString *)fxParam;
+
+/*! \if ENGLISH
+*  \brief Gets the custom data parameter of NvsFx at certain time.
+*  \param fxParam The type of the NvsFx's custom data parameter. Please refer to [PARAM_TYPE_MENU].
+*  \param time current time (In microseconds).
+*  \return Returns the custom data parameter of NvsFx at certain time.
+*  \else
+*  \brief 获得特效自定义数据参数值
+*  \param fxParam 特效的自定义数据参数值的类型。请参见[PARAM_TYPE_MENU] (@ref PARAM_TYPE)
+*  \param time 关键帧的时间 (单位为微秒).
+*  \return 返回获得的自定义数据参数值
+*  \endif
+*  \sa setMenuVal
+*/
+- (NvsArbitraryData *)getArbDataValAtTime:(NSString *)fxParam time:(int64_t)time;
+
+/*! \if ENGLISH
+*  \brief Sets custom data parameter value.
+*  \param fxParam The type of custom data parameter for the effect.
+*  \param time current time (In microseconds).
+*  \param val String.
+*  \else
+*  \brief 设置自定义数据参数值
+*  \param fxParam 特效的自定义数据参数的类型
+*  \param val 字符串
+*  \param time 关键帧的时间 (单位为微秒).
+*  \endif
+*  \sa getMenuVal
+*/
+- (void)setArbDataValAtTime:(NSString *)fxParam val:(NvsArbitraryData *)val time:(int64_t)time;
+
+/*! \if ENGLISH
+*  \brief Remove key frame at time from key frame list.
+*  \param fxParam The type of custom data parameter for the effect.
+*  \param time current time (In microseconds).
+*  \return Returns succeeded
+*  \else
+*  \brief 删除参数某一个时间点的关键帧
+*  \param fxParam 特效的数据参数
+*  \param time 关键帧的时间 (单位为微秒).
+*  \return 返回是否执行成功
+*  \endif
+*  \sa getMenuVal
+*/
+- (bool)removeKeyframeAtTime:(NSString *)fxParam time:(int64_t)time;
+
+/*! \if ENGLISH
+*  \brief Remove all key frame from key frame list.
+*  \param fxParam The type of custom data parameter for the effect.
+*  \return Returns succeeded
+*  \else
+*  \brief 删除参数的所有关键帧
+*  \param fxParam 特效的数据参数
+*  \return 返回是否执行成功
+*  \endif
+*/
+- (bool)removeAllKeyframe:(NSString *)fxParam;
+
+/*! \if ENGLISH
+*  \brief Check has key frame list of param.
+*  \param fxParam The type of custom data parameter for the effect.
+*  \return Returns whether there is a key frame list
+*  \else
+*  \brief 当前参数是否有关键帧列表
+*  \param fxParam 特效的数据参数
+*  \return 返回是否有关键帧列表
+*  \endif
+*/
+- (bool)hasKeyframeList:(NSString *)fxParam;
+
+/*! \if ENGLISH
+*  \brief Get key frame in list at current time.
+*  \param fxParam The type of custom data parameter for the effect.
+*  \param time current time(In microseconds).
+*  \param flags flag of finding mode,Please refer to [KEY_FRAME_FIND_MODE].
+*  \return Returns key frame time before current time,  If there is no key before this time point, return - 1
+*  \else
+*  \brief 当前参数是否有关键帧列表
+*  \param fxParam 特效的数据参数
+*  \param time 时间位置 (单位为微秒).
+*  \param flags 查找标志位，请参见[KEY_FRAME_FIND_MODE] (@ref KEY_FRAME_FIND_MODE).
+*  \return 返回在当前时间位置的关键帧时间位置，如果没有找到对应关键帧返回-1
+*  \endif
+*/
+- (int64_t)findKeyframeTime:(NSString *)fxParam time:(int64_t)time flags:(int)flags;
+
+/*! \if ENGLISH
 *   \brief Set the filter intensity.
 *   \param intensity The filter intensity value. The value range is generally [0,1]. 0 means the filter has no effect, the default value is 1.
 *   \else
@@ -274,6 +652,30 @@ NVS_EXPORT @interface NvsFx : NvsObject
 *   \since 2.0.2
 */
 -(float)getFilterIntensity;
+
+/*! \if ENGLISH
+ *  \brief Sets the mask of the filter.
+ *  \param useMask Wether use mask to limit the filter's region
+ *  \else
+ *  \brief 设置滤镜遮罩
+ *  \param useMask 使用滤镜遮罩，仅在有图像的区域添加滤镜效果
+ *  \endif
+ *  \sa getFilterMask
+ *  \since 2.14.1
+ */
+-(void)setFilterMask:(bool)useMask;
+
+/*! \if ENGLISH
+ *  \brief Gets the usage of the filter's mask.
+ *  \return Returns the usage of the filter's mask.
+ *  \else
+ *  \brief 获得是否使用滤镜遮罩
+ *  \return 返回是否使用了滤镜遮罩
+ *  \endif
+ *  \sa setFilterMask
+ *  \since 2.14.1
+ */
+-(bool)getFilterMask;
 
 /*! \if ENGLISH
  *  \brief Sets whether the filter is regional.
@@ -300,16 +702,65 @@ NVS_EXPORT @interface NvsFx : NvsObject
 -(BOOL)getRegional;
 
 /*! \if ENGLISH
+ *  \brief Sets whether the regional filter ignore Background.
+ *  \param regional whether the regional filter ignores Background. true means ignored, while false means the opposite.
+ *  \else
+ *  \brief 设置局部滤镜是否消除背景
+ *  \param regional 是否为局部滤镜消除背景，true为消除，false不是
+ *  \endif
+ *  \sa getIgnoreBackground
+ *  \since 2.15.1
+ */
+-(void)setIgnoreBackground:(BOOL)isIgnoreBackground;
+
+/*! \if ENGLISH
+ *  \brief Gets whether the regional filter ignores Background.
+ *  \return Returns whether the regional filter ignores Background.
+ *  \else
+ *  \brief 获得局部滤镜是否消除背景
+ *  \return 返回局部滤镜是否消除背景
+ *  \endif
+ *  \sa setIgnoreBackground
+ *  \since 2.15.1
+ */
+-(BOOL)getIgnoreBackground;
+
+
+/*! \if ENGLISH
+ *  \brief Sets whether the regional filter inverse region.
+ *  \param regional whether the regional filter inverse region. true means inversed, while false means the opposite.
+ *  \else
+ *  \brief 设置局部滤镜是否反选区域
+ *  \param regional 是否为局部滤镜反选区域，true为反选，false不是
+ *  \endif
+ *  \sa getInverseRegion
+ *  \since 2.15.1
+ */
+-(void)setInverseRegion:(BOOL)isInverseRegion;
+
+/*! \if ENGLISH
+ *  \brief Gets whether the regional filter inverse region.
+ *  \return Returns whether the regional filter inverses region.
+ *  \else
+ *  \brief 获得局部滤镜是否反选区域
+ *  \return 返回局部滤镜是否反选区域
+ *  \endif
+ *  \sa setInverseRegion
+ *  \since 2.15.1
+ */
+-(BOOL)getInverseRegion;
+
+/*! \if ENGLISH
  *  \brief Get the region of this regional filter.
  *  \return Returns the region of this regional filter. It is composed with a series of points, which are in NDC coordinate system.
  *  \else
  *  \brief 获取局部滤镜的控制范围
  *  \return 返回局部滤镜的控制范围，点的坐标在NDC坐标系中
  *  \endif
- *  \sa setRegiona:
+ *  \sa setRegion:
  *  \since 2.14.0
  */
-- (NSArray *)getRegin;
+-(NSArray *)getRegion;
 
 /*! \if ENGLISH
  *  \brief Sets the region of this regional filter.
@@ -322,6 +773,50 @@ NVS_EXPORT @interface NvsFx : NvsObject
  *  \since 2.10.1
  */
 -(void)setRegion:(NSArray *)region;
+
+/*! \if ENGLISH
+ *  \brief Get the region of this regional filter.
+ *  \return region the effective region of this filter. It could be series of points, cubic bezier curve or ellipse, which are in NDC coordinate system.
+ *  \else
+ *  \brief 获取局部滤镜的控制范围
+ *  \return region 局部滤镜的控制范围, 构成控制区域的可以是点，贝塞尔曲线或者椭圆，对应的坐标系为NDC坐标系
+ *  \endif
+ *  \since 2.16.0
+*/
+-(NvsMaskRegionInfo *)getRegionInfo;
+
+/*! \if ENGLISH
+ *  \brief Sets the region of this regional filter.
+ *  \param region the effective region of this filter. It could be series of points, cubic bezier curve or ellipse, which are in NDC coordinate system.
+ *  \else
+ *  \brief 设置局部滤镜的控制范围
+ *  \param region 局部滤镜的控制范围, 构成控制区域的可以是点，贝塞尔曲线或者椭圆，对应的坐标系为NDC坐标系
+ *  \endif
+ *  \since 2.16.0
+ */
+-(void)setRegionInfo:(NvsMaskRegionInfo *)info;
+
+/*! \if ENGLISH
+ *  \brief Sets the region of this regional filter at certain time.
+ *  \param region the effective region of this filter. It could be series of points, cubic bezier curve or ellipse, which are in NDC coordinate system.
+ *  \else
+ *  \brief 设置某时刻局部滤镜的控制范围
+ *  \param region 局部滤镜的控制范围, 构成控制区域的可以是点，贝塞尔曲线或者椭圆，对应的坐标系为NDC坐标系
+ *  \endif
+ *  \since 2.16.0
+ */
+-(void)setRegionInfoAtTime:(NvsMaskRegionInfo *)info time:(int64_t)time;
+
+/*! \if ENGLISH
+ *  \brief Get the region of this regional filter at certain time.
+ *  \return region the effective region of this filter. It could be series of points, cubic bezier curve or ellipse, which are in NDC coordinate system.
+ *  \else
+ *  \brief 获取某时刻局部滤镜的控制范围
+ *  \return region 局部滤镜的控制范围, 构成控制区域的可以是点，贝塞尔曲线或者椭圆，对应的坐标系为NDC坐标系
+ *  \endif
+ *  \since 2.16.1
+*/
+-(NvsMaskRegionInfo *)getRegionInfoAtTime:(int64_t)time;
 
 /*! \if ENGLISH
  *  \brief Sets the feather width of this regional filter.
@@ -346,6 +841,56 @@ NVS_EXPORT @interface NvsFx : NvsObject
  *  \since 2.10.1
  */
 -(float)getRegionalFeatherWidth;
+
+/*! \if ENGLISH
+ *  \brief Sets the feather width of this regional filter at certain time.
+ *  \param featherWidth feather width of regional filter
+ *  \param time time of regional filter
+ *  \else
+ *  \brief 设置局部滤镜的羽化宽度
+ *  \param featherWidth 局部滤镜的羽化宽度
+ *  \param time 局部滤镜的的时间
+ *  \endif
+ *  \sa getRegionalFeatherWidthAtTime:
+ *  \since 2.16.1
+ */
+- (void)setRegionalFeatherWidthAtTime:(float)featherWidth time:(int64_t)time;
+
+/*! \if ENGLISH
+ *  \brief Gets the feather width of this regional filter at certain time.
+ *  \return Returns the feather width of this regional filter at certain time.
+ *  \else
+ *  \brief 获得某一时刻局部滤镜的羽化宽度
+ *  \return 返回某一时刻局部滤镜的羽化宽度
+ *  \endif
+ *  \sa setRegionalFeatherWidth:time:
+ *  \since 2.16.1
+ */
+- (float)getRegionalFeatherWidthAtTime:(int64_t)time;
+
+/*! \if ENGLISH
+ *  \brief Sets the coordinate system of the region.
+ *  \param type coordinate system type of the region, NDC as the default.
+ *  \else
+ *  \brief 设置局部滤镜所在坐标系类型，默认为NDC坐标系
+ *  \param coordinateSystem 局部滤镜所在坐标系
+ *  \endif
+ *  \sa getRegionCoordinateSystemType
+ *  \since 2.16.1
+ */
+-(void)setRegionCoordinateSystemType:(int)type;
+
+/*! \if ENGLISH
+ *  \brief Gets the coordinate system of the region.
+ *  \return Returns the coordinate system of the region.
+ *  \else
+ *  \brief 获得局部滤镜所在坐标系类型
+ *  \return 返回局部滤镜所在坐标系类型
+ *  \endif
+ *  \sa setRegionCoordinateSystemType
+ *  \since 2.16.1
+ */
+-(int)getRegionCoordinateSystemType;
 
 /*! \if ENGLISH
 *   \brief Gets the particle effect context.

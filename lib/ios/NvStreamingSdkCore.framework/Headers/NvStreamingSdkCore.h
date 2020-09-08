@@ -50,5 +50,7 @@
 #import "NvsVideoFx.h"
 #import "NvsVideoTrack.h"
 #import "NvsVideoTransition.h"
+#import "NvsMediaFileConvertor.h"
+#import "NvsMaskRegionInfo.h"
 
 #endif /* Header_h */

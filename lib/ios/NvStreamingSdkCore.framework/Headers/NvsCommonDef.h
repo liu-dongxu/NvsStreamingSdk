@@ -109,6 +109,18 @@ typedef enum NvsTextAlignment
 } NvsTextAlignment;
 
 /*! \if ENGLISH
+*   \brief letter spacing type
+*   \else
+*   \brief 字间距类型
+*   \endif
+*/
+typedef enum NvsLetterSpacingType
+{
+    NvsLetterSpacingTypePercentage = 0,
+    NvsLetterSpacingTypeAbsolute
+} NvsLetterSpacingType;
+
+/*! \if ENGLISH
 *   \brief Uses the default caption package
 *   \else
 *   \brief 使用默认的字幕包属性
@@ -142,7 +154,8 @@ typedef enum NvsCategory
 typedef enum NvsVideoFramePixelFormat
 {
     NvsPixelFormat_Nv12,  //!< \if ENGLISH YUV  4:2:0   12bpp (Two channels, one channel is a continuous luminance channel, and the other channel is VU component interlaced) \else  YUV  4:2:0   12bpp ( 2通道, 一个通道是连续的亮度通道, 另一通道为VU分量交错 ) \endif
-    NvsPixelFormat_YUV420 //!< \if ENGLISH YUV  4:2:0   12bpp (Three channels, one luminance channel, the other two are U component and V component channels, all channels are continuous) \else  YUV  4:2:0   12bpp ( 3通道, 一个亮度通道, 另两个为U分量和V分量通道, 所有通道都是连续的 ) \endif
+    NvsPixelFormat_YUV420, //!< \if ENGLISH YUV  4:2:0   12bpp (Three channels, one luminance channel, the other two are U component and V component channels, all channels are continuous) \else  YUV  4:2:0   12bpp ( 3通道, 一个亮度通道, 另两个为U分量和V分量通道, 所有通道都是连续的 ) \endif
+    NvsPixelFormat_BGRA //!< \if ENGLISH BGRA \else  BGRA \endif
 } NvsVideoFramePixelFormat;
 
 /*! \if ENGLISH

@@ -16,9 +16,13 @@
 #pragma once
 
 #import "NvsTrack.h"
+#import "NvsCustomVideoFx.h"
+#import "NvsCustomVideoTransition.h"
 
 @class NvsVideoClip;
 @class NvsVideoTransition;
+@class NvsTrackVideoFx;
+
 
 /*! \if ENGLISH
  *  \brief Video track is the collection of video clips.
@@ -386,6 +390,26 @@ NVS_EXPORT @interface NvsVideoTrack : NvsTrack
 */
 - (NvsVideoTransition *)setPackagedTransition:(unsigned int)srcClipIndex withPackageId:(NSString *)packageId;
 
+/*!
+ *  \if ENGLISH
+ *  \brief Sets custom video transition.
+ *  \param srcClipIndex Source video clip index.
+ *  \param customVideoTransitionRender User-implemented custom video effects renderer interface;
+ *  \return Returns the video transition object.
+ *  \warning This interface will cause the streaming engine state to jump to the engine stop state. For details, please refer to [Engine Change](\ref EngineChange.md).
+ *  \sa setBuiltinTransition
+ *  \else
+ *  \brief 设置自定义转场
+ *  \param srcClipIndex 源视频片段索引
+ *  \param customVideoTransitionRender 用户自定义转场特效
+
+ *  \return 返回设置的视频转场对象
+ *  \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
+ *  \sa setBuiltinTransition
+ *  \endif
+*/
+- (NvsVideoTransition *)setCustomVideoTransition:(unsigned int)srcClipIndex withCustomRender:(id<NvsCustomVideoTransitionRenderer>)customVideoFxRender;
+
 /*! \if ENGLISH
  *  \brief Gets the transition by the source clip index.
  *  \param srcClipIndex The index of the source clip
@@ -398,5 +422,173 @@ NVS_EXPORT @interface NvsVideoTrack : NvsTrack
  *  \sa setBuiltinTransition:withName:
 */
 - (NvsVideoTransition *)getTransitionWithSourceClipIndex:(unsigned int)srcClipIndex;
+
+/*! \if ENGLISH
+ *  \brief Get the first track video effect on the track.
+ *  \return Returns the acquired NvsTrackVideoFx object.
+ *  \since 2.15.0
+ *  \else
+ *  \brief 获取轨道上第一个轨道视频特效
+ *  \return 返回获取的轨道视频特效对象
+ *  \since 2.15.0
+ *  \endif
+*/
+- (NvsTrackVideoFx *)getFirstTrackVideoFx;
+
+/*! \if ENGLISH
+ *  \brief Get the last track video effect on the track.
+ *  \return Returns the acquired NvsTrackVideoFx object.
+ *  \since 2.15.0
+ *  \else
+ *  \brief 获取轨道上最后一个轨道视频特效
+ *  \return 返回获取的轨道视频特效对象
+ *  \since 2.15.0
+ *  \endif
+*/
+- (NvsTrackVideoFx *)getLastTrackVideoFx;
+
+/*! \if ENGLISH
+ *  \brief Get the previous track video effect of a track video effect on the track.
+ *  \param videoFx The NvsTrackVideoFx object
+ *  \return Returns the acquired NvsTrackVideoFx object.
+ *  \since 2.15.0
+ *  \else
+ *  \brief 获取轨道上某个轨道视频特效的前一个轨道视频特效
+ *  \param videoFx 轨道视频特效对象
+ *  \return 返回获取的轨道视频特效对象
+ *  \since 2.15.0
+ *  \endif
+*/
+- (NvsTrackVideoFx *)getPrevTrackVideoFx:(NvsTrackVideoFx *)videoFx;
+
+/*! \if ENGLISH
+ *  \brief Get the next track video effect of a track video effect on the track.
+ *  \param videoFx The NvsTrackVideoFx object
+ *  \return Returns the acquired NvsTrackVideoFx object.
+ *  \since 2.15.0
+ *  \else
+ *  \brief 获取轨道上某个轨道视频特效的下一个轨道视频特效
+ *  \param videoFx 轨道视频特效对象
+ *  \return 返回获取的轨道视频特效对象
+ *  \since 2.15.0
+ *  \endif
+*/
+- (NvsTrackVideoFx *)getNextTrackVideoFx:(NvsTrackVideoFx *)videoFx;
+
+/*! \if ENGLISH
+ *  \brief Get a list of track video effects based on position on the track.
+ *  \param pos The position on the track (in microseconds)
+ *  \return Returns an array of track video effects in current position.
+ *  <br>The ordering rules for the acquired track video effects are as follows:
+ *  <br>1.When adding, the in points are different, arranged in the order of the in points;
+ *  <br>2.When adding, the entry points are the same, arranged in the order of adding timeline video effects.
+ *  \since 2.15.0
+ *  \else
+ *  \brief 根据轨道上的位置获得轨道视频特效列表
+ *  \param pos 轨道上的位置（单位微秒）
+ *  \return 返回当前位置轨道视频特效对象的数组
+ *  <br>获取的轨道视频特效排序规则如下：
+ *  <br>1.添加时入点不同，按入点的先后顺序排列；
+ *  <br>2.添加时入点相同，按添加轨道视频特效的先后顺序排列。
+ *  \since 2.15.0
+ *  \endif
+*/
+- (NSArray *)getTrackVideoFxByPosition:(int64_t)pos;
+
+/*!
+ *  \if ENGLISH
+ *  \brief Turn on special effect rendering based on the original scale of the video track.
+ *  \param Enable Turn on or not.
+ *  \sa isOriginalRender
+ *  \else
+ *  \brief 开启按照视频轨道的原始比例进行特效渲染
+ *  \param enable  是否开启
+ *  \sa isOriginalRender
+ *  \endif
+*/
+- (void)setEnableOriginalRender:(BOOL)enable;
+
+/*!
+ *  \if ENGLISH
+ *  \brief Gets whether the original scale rendering mode is turned on.
+ *  \return Turn on or not.
+ *  \sa setEnableOriginalRender
+ *  \else
+ *  \brief 获取是否开启了原始比例渲染的模式
+ *  \return 返回是否开启
+ *  \sa setEnableOriginalRender
+ *  \endif
+*/
+- (BOOL)isOriginalRender;
+
+/*! \if ENGLISH
+ *  \brief Add a built-in track video effect on the track
+ *  \param inPoint The in point of the track video effect on the track (in microseconds)
+ *  \param duration Duration of the track video effect which displayed (in microseconds)
+ *  \param videoFxName The video effect name
+ *  \return Return the NvsTrackVideoFx object
+ *  \since 2.15.0
+ *  \else
+ *  \brief 在轨道上添加内嵌的轨道视频特效
+ *  \param inPoint 轨道视频特效在时间线上的入点（单位微秒）
+ *  \param duration 轨道视频特效显示的时长（单位微秒）
+ *  \param videoFxName 内嵌的轨道视频特效名字
+ *  \return 返回轨道视频特对象
+ *  \since 2.15.0
+ *  \endif
+*/
+- (NvsTrackVideoFx *)addBuiltinTrackVideoFx:(int64_t)inPoint duration:(int64_t)duration videoFxName:(NSString *)videoFxName;
+
+/*! \if ENGLISH
+ *  \brief Add a track video effect in the form of a resource package on the track.
+ *  \param inPoint The in point of the track video effect on the track (in microseconds)
+ *  \param duration  Duration of the timeline video effect which displayed (in microseconds)
+ *  \param videoFxPackageId The Id of resource package
+ *  \return Return the NvsTrackVideoFx object
+ *  \since 2.15.0
+ *  \else
+ *  \brief 在轨道上添加资源包形式的轨道视频特效
+ *  \param inPoint 轨道视频特效在时间线上的入点（单位微秒）
+ *  \param duration 轨道视频特效显示的时长（单位微秒）
+ *  \param videoFxPackageId 轨道视频特效资源包Id
+ *  \return 返回轨道视频特对象
+ *  \since 2.15.0
+ *  \endif
+*/
+- (NvsTrackVideoFx *)addPackagedTrackVideoFx:(int64_t)inPoint duration:(int64_t)duration videoFxPackageId:(NSString *)videoFxPackageId;
+
+/*! \if ENGLISH
+ *  \brief Add a custom track video effect on the track
+ *  \param inPoint The in point of the track video effect on the track (in microseconds)
+ *  \param duration  Duration of the track video effect which displayed (in microseconds)
+ *  \param customVideoFxRender User-implemented custom video effects renderer interface
+ *  \return Return the NvsTrackVideoFx object
+ *  \since 2.15.0
+ *  \else
+ *  \brief 在轨道上添加自定义轨道视频特效
+ *  \param inPoint 轨道视频特效在时间线上的入点（单位微秒）
+ *  \param duration 轨道视频特效的时长（单位微秒）
+ *  \param customVideoFxRender 用户实现的自定义视频特效渲染器接口
+ *  \return 返回轨道视频对象
+ *  \endif
+ *  \since 2.15.0
+*/
+- (NvsTrackVideoFx *)addCustomTrackVideoFx:(int64_t)inPoint
+                                  duration:(int64_t)duration
+                       customVideoFxRender:(id<NvsCustomVideoFxRenderer>)customVideoFxRender;
+
+/*! \if ENGLISH
+ *  \brief Remove a track video effect from the track.
+ *  \param videoFx The NvsTrackVideoFx object which will be removed
+ *  \return Returns the next NvsTrackVideoFx object of current track video effect which has removed.
+ *  \since 2.15.0
+ *  \else
+ *  \brief 移除轨道上的轨道视频特效
+ *  \param videoFx 要移除的轨道视频特效对象
+ *  \return 返回被删除的轨道视频特效的下一个轨道视频特效对象
+ *  \since 2.15.0
+ *  \endif
+*/
+- (NvsTrackVideoFx *)removeTrackVideoFx:(NvsTrackVideoFx *)videoFx;
 
 @end

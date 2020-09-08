@@ -31,12 +31,18 @@
 NVS_EXPORT @interface NvsTimelineCaption : NvsFx
 
 @property (readonly) BOOL isPanoramic;                //!< \if ENGLISH Whether it is a panorama caption \else 是否为全景图字幕 \endif \since 1.6.0
+@property (readonly) BOOL isModular;                  //!< \if ENGLISH whether the current caption is a modular caption \else 当前字幕是否为模块字幕 \endif \since 2.15.2
 @property (nonatomic) BOOL clipAffinityEnabled;       //!< \if ENGLISH Whether to enable the affinity with clip \else 是否开启与clip的亲和关系 \endif \since 1.7.1
 @property (readonly) int64_t inPoint;                 //!< \if ENGLISH The in point of the caption on the timeline(in microseconds) \else 字幕在时间线上显示的入点（单位微秒） \endif
 @property (readonly) int64_t outPoint;                //!< \if ENGLISH The out point of the caption on the timeline (in microseconds) \else 字幕在时间线显示上的出点（单位微秒） \endif
 @property (readonly) NvsRoleInTheme roleInTheme;      //!< \if ENGLISH The role of captions in the theme (general, title, and trailer.) \else 字幕在主题中的角色(通用、片头、片尾) \endif
 @property (readonly) NvsCategory category;            //!< \if ENGLISH Clip type \else 片段类型 \endif
 @property (readonly) NSString* captionStylePackageId; //!< \if ENGLISH The package ID of the caption style\else 字幕样式包裹ID \endif
+@property (readonly) NSString* modularCaptionContextPackageId;      //!< \if ENGLISH The package ID of the modular caption context style \else 模块字幕环境样式包裹ID \endif \since 2.15.2
+@property (readonly) NSString* modularCaptionRendererPackageId;     //!< \if ENGLISH The package ID of the modular caption render style \else 模块字幕渲染样式包裹ID \endif \since 2.15.2
+@property (readonly) NSString* modularCaptionAnimationPackageId;    //!< \if ENGLISH The package ID of the modular caption animation style \else 模块字幕循环动画样式包裹ID \endif \since 2.15.2
+@property (readonly) NSString* modularCaptionInAnimationPackageId;  //!< \if ENGLISH The package ID of the modular caption in-animation style \else 模块字幕入动画样式包裹ID \endif \since 2.15.2
+@property (readonly) NSString* modularCaptionOutAnimationPackageId; //!< \if ENGLISH The package ID of the modular caption out-animation style \else 模块字幕出动画样式包裹ID \endif \since 2.15.2
 
 /*! \if ENGLISH
  *  \brief Changes the out point of the caption on the timeline.
@@ -99,6 +105,158 @@ NVS_EXPORT @interface NvsTimelineCaption : NvsFx
 -(bool) applyCaptionStyle:(NSString*) captionStylePackageId;
 
 /*! \if ENGLISH
+ *  \brief Applys modular caption context style.
+ *  \param captionContextPackageId Modular caption context style resource package ID.
+ *  \return Returns boolean value. True means a successful application, false means a failure.
+ *  \warning This interface will cause the streaming engine state to jump to the engine stop state. For details, please refer to [Engine Change](\ref EngineChange.md).
+ *  \else
+ *  \brief 运用模块字幕环境样式包
+ *  \param captionContextPackageId 字幕环境样式资源包ID
+ *  \return 返回boolean值。true表示成功运用，false则运用失败
+ *  \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)
+ *  \endif
+ *  \sa getModularCaptionContextPackageId
+ *  \since 2.15.2
+ */
+-(bool) applyModularCaptionContext:(NSString*) captionContextPackageId;
+
+/*! \if ENGLISH
+ *  \brief Applys modular caption render style.
+ *  \param captionRendererPackageId Modular caption render style resource package ID.
+ *  \return Returns boolean value. True means a successful application, false means a failure.
+ *  \warning This interface will cause the streaming engine state to jump to the engine stop state. For details, please refer to [Engine Change](\ref EngineChange.md).
+ *  \else
+ *  \brief 运用模块字幕渲染样式包
+ *  \param captionRendererPackageId 字幕渲染样式资源包ID
+ *  \return 返回boolean值。true表示成功运用，false则运用失败
+ *  \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)
+ *  \endif
+ *  \sa getModularCaptionRenderPackageId
+ *  \since 2.15.2
+ */
+-(bool) applyModularCaptionRenderer:(NSString*) captionRendererPackageId;
+
+/*! \if ENGLISH
+ *  \brief Applys modular caption loop-animation style.
+ *  \param captionAnimationPackageId Modular caption loop-animation style resource package ID.
+ *  \return Returns boolean value. True means a successful application, false means a failure.
+ *  \warning This interface will cause the streaming engine state to jump to the engine stop state. For details, please refer to [Engine Change](\ref EngineChange.md).
+ *  \else
+ *  \brief 运用模块字幕循环动画样式包
+ *  \param captionAnimationPackageId 字幕循环动画样式资源包ID
+ *  \return 返回boolean值。true表示成功运用，false则运用失败
+ *  \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)
+ *  \endif
+ *  \sa getModularCaptionAnimationPackageId
+ *  \since 2.15.2
+ */
+-(bool) applyModularCaptionAnimation:(NSString*) captionAnimationPackageId;
+
+/*! \if ENGLISH
+ *  \brief Applys modular caption in-animation style. Notes：please set loop-Animation to null before you set in-animation, otherwise it will NOT works
+ *  \param captionInAnimationPackageId Modular caption in-animation style resource package ID.
+ *  \return Returns boolean value. True means a successful application, false means a failure.
+ *  \warning This interface will cause the streaming engine state to jump to the engine stop state. For details, please refer to [Engine Change](\ref EngineChange.md).
+ *  \else
+ *  \brief 运用模块字幕入动画样式包。注意：如果已经应用了循环动画样式包，需要先把循环动画设置为null，否则不生效
+ *  \param captionInAnimationPackageId 字幕入动画样式资源包ID
+ *  \return 返回boolean值。true表示成功运用，false则运用失败
+ *  \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)
+ *  \endif
+ *  \sa getModularCaptionInAnimationPackageId
+ *  \since 2.15.2
+ */
+-(bool) applyModularCaptionInAnimation:(NSString*) captionInAnimationPackageId;
+
+/*! \if ENGLISH
+ *  \brief Applys modular caption out-animation style.Notes：please set loop-Animation to null before you set out-animation, otherwise it will NOT works
+ *  \param captionOutAnimationPackageId Modular caption out-animation style resource package ID.
+ *  \return Returns boolean value. True means a successful application, false means a failure.
+ *  \warning This interface will cause the streaming engine state to jump to the engine stop state. For details, please refer to [Engine Change](\ref EngineChange.md).
+ *  \else
+ *  \brief 运用模块字幕出动画样式包. 注意：如果已经应用了循环动画样式包，需要先把循环动画设置为null，否则不生效
+ *  \param captionOutAnimationPackageId 字幕出动画样式资源包ID
+ *  \return 返回boolean值。true表示成功运用，false则运用失败
+ *  \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)
+ *  \endif
+ *  \sa getModularCaptionOutAnimationPackageId
+ *  \since 2.15.2
+ */
+-(bool) applyModularCaptionOutAnimation:(NSString*) captionOutAnimationPackageId;
+
+/*! \if ENGLISH
+ *  \brief Set modular caption Animation Peroid
+ *  \param periodInMS Animation peroid in million second
+ *  \else
+ *  \brief 设置模块字幕循环动画的周期
+ *  \param periodInMS 周期的时间，注意：单位是毫秒
+ *  \endif
+ *  \sa getModularCaptionAnimationPeroid
+ *  \since 2.15.2
+ */
+-(void) setModularCaptionAnimationPeroid:(int)periodInMS;
+
+/*! \if ENGLISH
+ *  \brief Get modular caption Animation Peroid
+ *  \return Return animation peroid in million second
+ *  \else
+ *  \brief 获取模块字幕循环动画的周期
+ *  \return 返回模块字幕的动画周期，注意：单位是毫秒
+ *  \endif
+ *  \sa setModularCaptionAnimationPeroid
+ *  \since 2.15.2
+ */
+-(int) getModularCaptionAnimationPeroid;
+
+/*! \if ENGLISH
+ *  \brief Set modular caption in-animation duration
+ *  \param inAnimationDurationInMS in-animation duration in million second
+ *  \else
+ *  \brief 设置模块字幕入动画的时长
+ *  \param inAnimationDurationInMS 入动画的时长，注意：单位是毫秒
+ *  \endif
+ *  \sa getModularCaptionInAnimationDuration
+ *  \since 2.15.2
+ */
+-(void) setModularCaptionInAnimationDuration:(int)inAnimationDurationInMS;
+
+/*! \if ENGLISH
+ *  \brief Get modular caption in-animation duration
+ *  \return Return in-animation duration in million second
+ *  \else
+ *  \brief 获取模块字幕入动画的时长
+ *  \return 返回模块字幕入动画的时长，注意：单位是毫秒
+ *  \endif
+ *  \sa setModularCaptionInAnimationDuration
+ *  \since 2.15.2
+ */
+-(int) getModularCaptionInAnimationDuration;
+
+/*! \if ENGLISH
+ *  \brief Set modular caption out-animation duration
+ *  \param outAnimationDurationInMS out-animation duration in million second
+ *  \else
+ *  \brief 设置模块字幕出动画的时长
+ *  \param outAnimationDurationInMS 出动画的时长，注意：单位是毫秒
+ *  \endif
+ *  \sa getModularCaptionOutAnimationDuration
+ *  \since 2.15.2
+ */
+-(void) setModularCaptionOutAnimationDuration:(int)outAnimationDurationInMS;
+
+/*! \if ENGLISH
+ *  \brief Get modular caption out-animation duration
+ *  \return Return out-animation duration in million second
+ *  \else
+ *  \brief 获取模块字幕出动画的时长
+ *  \return 返回模块字幕出动画的时长，注意：单位是毫秒
+ *  \endif
+ *  \sa setModularCaptionOutAnimationDuration
+ *  \since 2.15.2
+ */
+-(int) getModularCaptionOutAnimationDuration;
+
+/*! \if ENGLISH
  *  \brief apply the caption style.
  *  \param captionStylePackageId The resource package ID of the caption style
  *  \param isUseDefaultAssetParam Whether to use the default material parameters.
@@ -135,6 +293,28 @@ NVS_EXPORT @interface NvsTimelineCaption : NvsFx
  *  \sa setText:
 */
 - (NSString *)getText;
+
+/*! \if ENGLISH
+ *  \brief Sets whether the caption is vertical layout.
+ *  \param verticalLayout Indicates whether the caption is vertical layout.YES means it is vertical layout, NO means it is not.
+ *  \else
+ *  \brief 设置字幕是否为竖版布局
+ *  \param verticalLayout 表示字幕是否为竖版布局，YES表示是竖版布局，NO则为水平布局。
+ *  \endif
+ *  \sa getVerticalLayout
+*/
+- (void)setVerticalLayout:(BOOL)verticalLayout;
+
+/*! \if ENGLISH
+ *  \brief Gets the state whether the caption is vertical layout.
+ *  \return Returns the state whether the caption vertical layout. YES means it is vertical layout, NO means it is not.
+ *  \else
+ *  \brief 获取字幕布局状态
+ *  \return 返回字幕布局状态，YES表示字幕为竖版布局，NO则水平布局。
+ *  \endif
+ *  \sa setVerticalLayout:
+*/
+- (BOOL)getVerticalLayout;
 
 /*! \if ENGLISH
  *  \brief Sets the caption alignment method.
@@ -225,28 +405,79 @@ NVS_EXPORT @interface NvsTimelineCaption : NvsFx
 - (BOOL)getItalic;
 
 /*! \if ENGLISH
- *  \brief Sets caption word spacing.
- *  \param letterSpacing Word spacing is expressed in percentage value. 100 is the original default word spacing value.
+ *  \brief Gets caption word spacing.
+ *  \return Returns the float value, the percentage value by default.(@ref LETTER_SPACING_TYPE)
  *  \else
- *  \brief 设置字幕字间距
- *  \param letterSpacing 字间距，百分比值，100为原始默认字间距
+ *  \brief 获取字幕字间距
+ *  \return 返回float值，类型默认百分比值。(@ref LETTER_SPACING_TYPE)
  *  \endif
- *  \sa setLetterSpacing:
- *  \since 2.13.0
+ *  \sa setLetterSpacing
+ *  \sa setLetterSpacingType
+ *  \since 1.16.0
  */
 - (float)getLetterSpacing;
 
 /*! \if ENGLISH
- *  \brief Gets caption word spacing.
- *  \return Returns the float value, the percentage value. 100 is the original default word spacing.
+ *  \brief Sets caption word spacing.
+ *  \param letterSpacing Word spacing is expressed in percentage value by default. (@ref LETTER_SPACING_TYPE)
  *  \else
- *  \brief 获取字幕字间距
- *  \return 返回float值，百分比值，100为原始默认字间距
+ *  \brief 设置字幕字间距
+ *  \param letterSpacing 字间距，类型默认百分比。(@ref LETTER_SPACING_TYPE)
  *  \endif
  *  \sa getLetterSpacing
- *  \since 2.13.0
+ *  \sa setLetterSpacingType
+ *  \since 1.16.0
  */
 - (void)setLetterSpacing:(float)letterSpacing;
+
+/*! \if ENGLISH
+ *  \brief Gets caption word spacing type.
+ *  \return return letterSpacingType.(@ref LETTER_SPACING_TYPE)
+ *  \else
+ *  \brief 获取字幕字间距类型
+ *  \return 返回字间距类型 (@ref LETTER_SPACING_TYPE)
+ *  \endif
+ *  \sa setLetterSpacingType
+ *  \since 2.15.1
+ */
+- (NvsLetterSpacingType)getLetterSpacingType;
+
+/*! \if ENGLISH
+ *  \brief Sets caption word spacing type.
+ *  \param letterSpacingType Word spacing type.(@ref LETTER_SPACING_TYPE)
+ *  \else
+ *  \brief 设置字幕字间距类型
+ *  \param letterSpacingType 字间距类型. (@ref LETTER_SPACING_TYPE)
+ *  \endif
+ *  \sa getLetterSpacingType
+ *  \since 2.15.1
+ */
+- (void)setLetterSpacingType:(NvsLetterSpacingType)letterSpacingType;
+
+/*! \if ENGLISH
+ *  \brief Gets caption line spacing.
+ *  \return return float value, line spacing is expressed in absolute value.
+ *  \else
+ *  \brief 获取字幕行间距
+ *  \return 返回float值， 行间距，绝对值
+ *  \endif
+ *  \sa setLineSpacing
+ *  \since 2.15.1
+ */
+- (float)getLineSpacing;
+
+/*! \if ENGLISH
+ *  \brief Sets caption line spacing.
+ *  \param lineSpacing line spacing is expressed in absolute value.
+ *  \else
+ *  \brief 设置字幕行间距
+ *  \param lineSpacing 行间距，绝对值
+ *  \endif
+ *  \sa getLineSpacing
+ *  \since 2.15.1
+ */
+- (void)setLineSpacing:(float)lineSpacing;
+
 
 /*! \if ENGLISH
  *  \brief Sets the color of the caption text.
@@ -921,6 +1152,86 @@ NVS_EXPORT @interface NvsTimelineCaption : NvsFx
  *  \since 02.11.0
 */
 - (void)setRecordingUserOperation:(BOOL)recordingUserOperation;
+
+/*! \if ENGLISH
+ *  \brief Set the caption opacity.
+ *  \param opacity The opacity of caption
+ *  \else
+ *  \brief 设置字幕透明度
+ *  \param value 字幕透明度
+ *  \endif
+ *  \sa getOpacity
+*/
+- (void)setOpacity:(float)opacity;
+
+/*! \if ENGLISH
+ *  \brief Get the caption opacity.
+ *  \return Return the opacity.
+ *  \else
+ *  \brief 获取字幕透明度
+ *  \return 返回字幕透明度
+ *  \endif
+ *  \sa setOpacity:
+*/
+- (float)getOpacity;
+
+/*! \if ENGLISH
+ *  \brief Set text background color
+ *  \param backgroundColor Background color value.
+ *  \else
+ *  \brief 设置字幕文本的背景颜色
+ *  \param backgroundColor 文本背景颜色值
+ *  \endif
+ *  \sa getBackgroundColor:
+ *  \since 2.15.1
+ */
+- (void)setBackgroundColor:(const NvsColor *)backgroundColor;
+
+/*! \if ENGLISH
+ *  \brief Get the current text background color value.
+ *  \return Returns the NvsColor object representing the current background color.
+ *  \else
+ *  \brief 获取字幕文本的当前背景颜色值
+ *  \return 返回NvsColor对象，表示当前的文本背景颜色值
+ *  \endif
+ *  \sa setBackgroundColor:
+ *  \since 2.15.1
+ */
+- (NvsColor)getBackgroundColor;
+
+/*! \if ENGLISH
+ *  \brief Set text background rectangle's corner radius
+ *  \param radius Corner radius value
+ *  \else
+ *  \brief 设置字幕文本的背景框的圆角半径
+ *  \param radius 圆角半径值
+ *  \endif
+ *  \sa getBackgroundRadius:
+ *  \since 2.15.1
+ */
+- (void)setBackgroundRadius:(float)radius;
+
+/*! \if ENGLISH
+ *  \brief Get the current text background rectangle's corner radius value
+ *  \return Returns corner radius value
+ *  \else
+ *  \brief 获取字幕文本的当前背景框的圆角半径
+ *  \return 返回圆角半径值
+ *  \endif
+ *  \sa setBackgroundRadius:
+ *  \since 2.15.1
+ */
+- (float)getBackgroundRadius;
+
+/*! \if ENGLISH
+ *  \brief Set the caption KeyFrameTime.
+ *  \else
+ *  \brief 设置字幕的关键帧时间
+ *  \endif
+ *  \sa setCurrentKeyFrameTime
+ *  \since 2.16.0
+*/
+- (void)setCurrentKeyFrameTime:(int64_t)time;
 
 @end
 
