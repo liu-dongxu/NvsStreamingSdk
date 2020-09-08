@@ -395,4 +395,26 @@ NVS_EXPORT @interface NvsTimelineCompoundCaption : NvsFx
  */
 - (float)getZValue;
 
+/*! \if ENGLISH
+ *  \brief Set the caption opacity.
+ *  \param opacity The opacity of caption
+ *  \else
+ *  \brief 设置字幕透明度
+ *  \param value 字幕透明度
+ *  \endif
+ *  \sa getOpacity
+*/
+- (void)setOpacity:(float)opacity;
+
+/*! \if ENGLISH
+ *  \brief Get the caption opacity.
+ *  \return Return the opacity.
+ *  \else
+ *  \brief 获取字幕透明度
+ *  \return 返回字幕透明度
+ *  \endif
+ *  \sa setOpacity:
+*/
+- (float)getOpacity;
+
 @end

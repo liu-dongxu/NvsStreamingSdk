@@ -106,6 +106,40 @@ NVS_EXPORT @interface NvsTimeline : NvsObject
 - (NvsAudioTrack *)appendAudioTrack;
 
 /*! \if ENGLISH
+ *  \brief insert video track.
+ *  \param trackIndex Index of the inserted track.
+ *  \return returns the insert NvsVideoTrack object.
+ *  \warning This interface will cause the streaming engine state to jump to the state of stopping engine. For details, please refer to [The Topic of Changing Engine](\ref EngineChange.md).
+ *  \else
+ *  \brief 插入视频轨道
+ *  \param trackIndex 插入后轨道的索引
+ *  \return 返回插入的视频轨道对象
+ *  \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
+ *  \endif
+ *  \sa removeVideoTrack
+ *  \sa videoTrackCount
+ *  \sa getVideoTrackByIndex
+*/
+- (NvsVideoTrack *)insertVideoTrack:(unsigned int)clipIndex;
+
+/*! \if ENGLISH
+*  \brief Appends audio track.
+*  \param trackIndex Index of the inserted track.
+*  \return returns the appended NvsAudioTrack object.
+*  \warning This interface will cause the streaming engine state to jump to the state of stopping engine. For details, please refer to [The Topic of Changing Engine](\ref EngineChange.md).
+*  \else
+*  \brief 插入音频轨道
+*  \param trackIndex 插入后轨道的索引
+*  \return 返回插入的音频轨道对象
+*  \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
+*  \endif
+*  \sa removeAudioTrack
+*  \sa audioTrackCount
+*  \sa getAudioTrackByIndex
+*/
+- (NvsAudioTrack *)insertAudioTrack:(unsigned int)clipIndex;
+
+/*! \if ENGLISH
  *  \brief Remove video track.
  *  \param trackIndex Index of video track
  *  \return Returns a BOOL value.YES means it removes successfully, NO means it fails.
@@ -330,6 +364,23 @@ NVS_EXPORT @interface NvsTimeline : NvsObject
  *  \sa removeCaption:
 */
 - (NvsTimelineCaption *)addPanoramicCaption:(NSString *)captionText inPoint:(int64_t)inPoint duration:(int64_t)duration captionStylePackageId:(NSString *)captionStylePackageId;
+
+/*! \if ENGLISH
+ *  \brief Add a modular caption on the timeline
+ *  \param captionText Text of caption
+ *  \param inPoint The in point of the caption on the timeline (in microseconds)
+ *  \param duration Caption display duration (in microseconds)
+ *  \return Returns the NvsTimelineCaption object
+ *  \else
+ *  \brief 在时间线上添加模块字幕
+ *  \param captionText 字幕的文字
+ *  \param inPoint 字幕在时间线上的起点（单位微秒）
+ *  \param duration 字幕显示时长（单位微秒）
+ *  \return 返回时间线字幕对象
+ *  \endif
+ *  \sa removeCaption
+ */
+- (NvsTimelineCaption *)addModularCaption:(NSString *)captionText inPoint:(int64_t)inPoint duration:(int64_t)duration;
 
 /*! \if ENGLISH
  *	\brief Remove the caption on the timeline.
@@ -914,6 +965,22 @@ NVS_EXPORT @interface NvsTimeline : NvsObject
 - (void)setPlaybackRateControl:(NSArray *) arrayPlaybackRateControlRegion;
 
 - (NSArray *)getPlaybackRateControl;
+
+/*! \if ENGLISH
+ *  \brief Move video track.
+ *  \param srcTrackIndex Index of source video track
+ *  \param dstTrackIndex Index of destination video track
+ *  \return Returns a boolean value.YES means it moves successfully, NO means it fails
+ *  \warning This interface will cause the streaming engine state to jump to the state of stopping engine. For details, please refer to [The Topic of Changing Engine](\ref EngineChange.md).
+ *  \else
+ *  \brief 移动视频轨道
+ *  \param srcTrackIndex 原视频轨道索引
+ *  \param dstTrackIndex 目标视频轨道索引
+ *  \return  判断是否移动成功。返回YES成功，NO则失败
+ *  \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
+ *  \endif
+ */
+- (BOOL)moveVideoTrackIndex:(unsigned int)srcTrackIndex dstTrackIndex:(unsigned int)dstTrackIndex;
 
 @end
 

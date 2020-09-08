@@ -17,6 +17,7 @@
 #import "NvsCommonDef.h"
 #import "NvsClip.h"
 #import "NvsCustomVideoFx.h"
+#import <CoreGraphics/CGGeometry.h>
 
 /*! \if ENGLISH
  *  \brief The type of the video clip
@@ -65,6 +66,34 @@ typedef enum NvsExtraVideoRotation {
     NvsExtraVideoRotation_180 = 2,
     NvsExtraVideoRotation_270 = 3
 } NvsExtraVideoRotation;
+
+/*! \if ENGLISH
+ *  \brief Track blending mode
+ *  \else
+ *  \brief 合成模式
+ *  \endif
+*/
+typedef enum NvsClipBlendingMode {
+    NvsClipBlendingMode_Normal = 0,        //!< \if ENGLISH Normal mode \else 一般默认 \endif
+    NvsClipBlendingMode_Multiplay,         //!< \if ENGLISH multiplay mode \else 正片叠底模式 \endif
+    NvsClipBlendingMode_Subtract,          //!< \if ENGLISH Subtract mode \else 减去模式 \endif
+    NvsClipBlendingMode_Screen,            //!< \if ENGLISH Screen mode \else 滤色模式 \endif
+    NvsClipBlendingMode_Add,               //!< \if ENGLISH Add mode \else 添加类型 \endif
+    NvsClipBlendingMode_Exclusion,         //!< \if ENGLISH Exclusion mode \else 排除模式 \endif
+    NvsClipBlendingMode_Darken,         //!< \if ENGLISH Darken mode \else 变暗模式 \endif
+    NvsClipBlendingMode_Burn,         //!< \if ENGLISH Burn mode \else 颜色加深模式 \endif
+    NvsClipBlendingMode_LinearBurn,         //!< \if ENGLISH Linear Burn mode \else 线性加深模式 \endif
+    NvsClipBlendingMode_Lighten,         //!< \if ENGLISH Lighten mode \else 变亮模式 \endif
+    NvsClipBlendingMode_Dodge,         //!< \if ENGLISH Dodge mode \else 颜色减淡模式 \endif
+    NvsClipBlendingMode_Overlay,         //!< \if ENGLISH Overlay mode \else 叠加模式 \endif
+    NvsClipBlendingMode_SoftLight,         //!< \if ENGLISH SoftLight mode \else 柔光模式 \endif
+    NvsClipBlendingMode_HardLight,         //!< \if ENGLISH HardLight mode \else 强光模式 \endif
+    NvsClipBlendingMode_VividLight,         //!< \if ENGLISH VividLight mode \else 亮光模式 \endif
+    NvsClipBlendingMode_PinLight,         //!< \if ENGLISH PinLight mode \else 点光模式 \endif
+    NvsClipBlendingMode_LinearLight,         //!< \if ENGLISH LinearLight mode \else 线性光模式 \endif
+    NvsClipBlendingMode_HardMix,         //!< \if ENGLISH HardMix mode \else 实色混合模式 \endif
+    NvsClipBlendingMode_Difference,         //!< \if ENGLISH Difference mode \else 差值模式 \endif
+} NvsClipBlendingMode;
 
 @class NvsVideoFx;
 
@@ -196,6 +225,28 @@ NVS_EXPORT @interface NvsVideoClip : NvsClip
  *  \sa setPan:andScan:
 */
 - (void)getPan:(float *)pan andScan:(float *)scan;
+
+/*! \if ENGLISH
+ *  \brief Sets whether to enable ROI mode on video clip. default pan and scan mode is used
+ *  \param disable whether to enable or not.
+ *  \else
+ *  \brief 设置视频是否启用ROI的模式,默认使用的是摇摄和扫描模式
+ *  \param enable 是否启用
+ *  \endif
+ *  \sa isVideoClipROIEnabled
+ */
+- (void)enableVideoClipROI:(BOOL) enable;
+
+/*! \if ENGLISH
+ *  \brief Gets whether to enable ROI mode on video clip.
+ *  \return Returns whether to enable ROI mode on video clip.
+ *  \else
+ *  \brief 获取视频是否启用ROI的模式
+ *  \return 返回获取的视频是否启用ROI的模式
+ *  \endif
+ *  \sa enableVideoClipROI
+ */
+- (BOOL)isVideoClipROIEnabled;
 
 /*! \if ENGLISH
  *  \brief Sets the background mode.
@@ -359,6 +410,84 @@ NVS_EXPORT @interface NvsVideoClip : NvsClip
 */
 - (double)getEndSpeed;
 
+/*!
+ *  \if ENGLISH
+ *  \brief set blending mode to video clip.
+ *  \param blendMode new blending mode.
+ *  \sa getBlendingMode
+ *  \else
+ *  \brief 设置合成模式
+ *  \param blendMode 合成模式
+ *  \sa getBlendingMode
+ *  \endif
+*/
+- (void)setBlendingMode:(NvsClipBlendingMode)blendMode;
+
+/*!
+ *  \if ENGLISH
+ *  \brief get blending mode from video clip.
+ *  \return current clip blending mode.
+ *  \sa setBlendingMode
+ *  \else
+ *  \brief 获取合成模式
+ *  \return 返回合成模式
+ *  \sa setBlendingMode
+ *  \endif
+*/
+- (NvsClipBlendingMode)getBlendingMode;
+
+/*!
+ *  \if ENGLISH
+ *  \brief set opacity value to video clip.
+ *  \param opacity new opacity value.
+ *  \sa getTrackOpacity
+ *  \else
+ *  \brief 设置透明度
+ *  \param opacity  透明度
+ *  \sa getOpacity
+ *  \endif
+*/
+- (void)setOpacity:(float)opacity;
+
+/*!
+ *  \if ENGLISH
+ *  \brief set opacity value from video clip.
+ *  \return current opacity value.
+ *  \sa setTrackOpacity
+ *  \else
+ *  \brief 获取透明度
+ *  \return 返回透明度
+ *  \sa setOpacity
+ *  \endif
+*/
+- (float)getOpacity;
+
+/*!
+ *  \if ENGLISH
+ *  \brief Turn on special effect rendering based on the original scale of the video clip.
+ *  \param Enable Turn on or not.
+ *  \sa IsOriginalRender
+ *  \else
+ *  \brief 开启按照视频片段的原始比例进行特效渲染
+ *  \param enable  是否开启
+ *  \sa IsOriginalRender
+ *  \endif
+*/
+- (void)setEnableOriginalRender:(BOOL)enable;
+
+/*!
+ *  \if ENGLISH
+ *  \brief Gets whether the original scale rendering mode is turned on.
+ *  \return Turn on or not.
+ *  \sa setEnableOriginalRender
+ *  \else
+ *  \brief 获取是否开启了原始比例渲染的模式
+ *  \return 返回是否开启
+ *  \sa setEnableOriginalRender
+ *  \endif
+*/
+- (BOOL)isOriginalRender;
+
 /*! \if ENGLISH
  *  \brief Appends the built-in effect on the clip.
  *  \param fxName The effect name,if users get the video effect name, please refer to [getAllBuiltinVideoFxNames()] (@ref NvsStreamingContext::getAllBuiltinVideoFxNames) or [The List of Built-in Effect Name] (\ref FxNameList.md)
@@ -514,5 +643,45 @@ NVS_EXPORT @interface NvsVideoClip : NvsClip
  *  \endif
 */
 - (NvsVideoFx *)getFxWithIndex:(unsigned int)fxIndex;
+
+/*! \if ENGLISH
+ *  \brief Gets the property effect of the video clip
+ *  \return Returns the obtained NvsVideoFx object.
+ *  \else
+ *  \brief 获取当前视频片段属性特效
+ *  \return 返回获取的视频特效对象
+ *  \endif
+*/
+- (NvsVideoFx *)getPropertyVideoFx;
+
+/*!
+ *  \if ENGLISH
+ *  \brief Turn on special effect rendering based on the original scale of the video clip.
+ *  \warning
+ *  \param Enable Turn on or not.
+ *  \sa IsOriginalRender
+ *  \else
+ *  \brief 设置属性特效是否有效
+ *  \warning 此接口会使setPan:andScan:，setSourceBackgroundMode 和setSourceBackgroundColor接口无效。
+ *   如果启用属性特效，可以通过特效中的参数来设置对应效果
+ *  \param enable  是否开启
+ *  \sa IsOriginalRender
+ *  \endif
+*/
+- (void)enablePropertyVideoFx:(BOOL)enable;
+
+/*!
+ *  \if ENGLISH
+ *  \brief Gets whether the original scale rendering mode is turned on.
+ *  \return Turn on or not.
+ *  \sa setEnableOriginalRender
+ *  \else
+ *  \brief 获取是否开启了原始比例渲染的模式
+ *  \return 返回是否开启
+ *  \sa enablePropertyEffect
+ *  \endif
+*/
+- (BOOL)isPropertyVideoFxEnabled;
+
 
 @end

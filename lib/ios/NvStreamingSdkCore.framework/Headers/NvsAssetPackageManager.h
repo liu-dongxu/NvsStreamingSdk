@@ -30,8 +30,13 @@ typedef enum
     NvsAssetPackageType_AnimatedSticker,    //!< \if ENGLISH Animated Sticker Type \else 动画贴纸 \endif
     NvsAssetPackageType_Theme,              //!< \if ENGLISH Theme Type \else 主题 \endif
     NvsAssetPackageType_CaptureScene,       //!< \if ENGLISH Capture Scene Type \else 拍摄场景 \endif
-    NvsAssetPackageType_ARScene,             //!< \if ENGLISH AR Scene Type\else AR场景 \endif
-    NvsAssetPackageType_CompoundCaption    //!< \if ENGLISH Compound caption type\else 复合字幕类型 \endif
+    NvsAssetPackageType_ARScene,            //!< \if ENGLISH AR Scene Type\else AR场景 \endif
+    NvsAssetPackageType_CompoundCaption,    //!< \if ENGLISH Compound caption type\else 复合字幕类型 \endif
+    NvsAssetPackageType_CaptionContext,     //!< \if ENGLISH Modular caption context type\else 模块字幕的环境包类型 \endif
+    NvsAssetPackageType_CaptionRenderer,    //!< \if ENGLISH Modular caption renderer type\else 模块字幕的渲染包类型 \endif
+    NvsAssetPackageType_CaptionAnimation,   //!< \if ENGLISH Modular caption animation type\else 模块字幕的循环动画类型 \endif
+    NvsAssetPackageType_CaptionInAnimation, //!< \if ENGLISH Modular caption in-animation type\else 模块字幕的入动画类型 \endif
+    NvsAssetPackageType_CaptionOutAnimation //!< \if ENGLISH Modular caption out-animation type\else 模块字幕的出动画类型 \endif
 } NvsAssetPackageType;
 
 /*! \if ENGLISH

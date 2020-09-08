@@ -31,7 +31,8 @@
 typedef enum {
     NvsStreamingContextFlag_Support4KEdit = 1,        //!< \if ENGLISH Supports up to 4K video editing. \else 支持4K视频编辑 \endif
     NvsStreamingContextFlag_Support8KEdit = 4,        //!< \if ENGLISH Supports up to 8K (images only). \else 支持8K编辑(仅图片) \endif
-    NvsStreamingContextFlag_AsyncEngineState = 16     //!< \if ENGLISH Asynchronous engine \else 引擎状态切换使用异步方式以便减少主线程的卡顿 \endif
+    NvsStreamingContextFlag_AsyncEngineState = 16,     //!< \if ENGLISH Asynchronous engine \else 引擎状态切换使用异步方式以便减少主线程的卡顿 \endif
+    NvsStreamingContextFlag_Support16KEdit = 128,        //!< \if ENGLISH Supports up to 16K (images only). \else 支持16K编辑(仅图片) \endif
 } NvsStreamingContextFlag;
 
 /*! \if ENGLISH
@@ -87,7 +88,8 @@ typedef enum {
     NvsStreamingEngineCompileFlag_DisableHardwareEncoder = 1, //!< \if ENGLISH Disables the hardware encoder \else 禁用硬件编码器 \endif
     NvsStreamingEngineCompileFlag_OnlyVideo = 4,     //!< \if ENGLISH Compile the video file only. \else 仅生产只有视频流的文件 \endif
     NvsStreamingEngineCompileFlag_OnlyAudio = 8,      //!< \if ENGLISH Compile the audio file only. \else 仅生产只有音频流的文件 \endif
-    NvsStreamingEngineCompileFlag_BuddyHostVideoFrame = 32      //!< \if ENGLISH Buddy video frame in host. \else 伴侣视频帧 \endif
+    NvsStreamingEngineCompileFlag_BuddyHostVideoFrame = 32,      //!< \if ENGLISH Buddy video frame in host. \else 伴侣视频帧 \endif
+    NvsStreamingEngineCompileFlag_TruncateAudioStream = 128     //!< \if ENGLISH Truncat audio stream make sure no longer than the length of the video  \else 截断音频流保证不超过视频的长度 \endif
 } NvsStreamingEngineCompileFlag;
 
 
@@ -113,6 +115,7 @@ typedef enum {
     NvsVideoCaptureResolutionGradeMedium,               //!< \if ENGLISH Medium resolution \else 中等分辨率 \endif
     NvsVideoCaptureResolutionGradeHigh,                 //!< \if ENGLISH High resolution \else 高分辨率 \endif
     NvsVideoCaptureResolutionGradeSupperHigh,           //!< \if ENGLISH Super high resolution \else 超高分辨率 \endif
+    NvsVideoCaptureResolutionGradeExtremelyHigh         //!< \if ENGLISH Extremely high resolution \else 极高分辨率 \endif
 } NvsVideoCaptureResolutionGrade;
 
 /*! \if ENGLISH
@@ -145,7 +148,10 @@ typedef enum
     NvsStreamingEngineCaptureFlag_IgnoreScreenOrientation = 64,     //!< \if ENGLISH Does not apply screen coordinate for defining rotation angle of captured video. \else 不使用屏幕方向来确定采集画面的旋转角度 \endif \since 1.15.2
     NvsStreamingEngineCaptureFlag_AutoVideoStabilization = 128,     //!< \if ENGLISH Enables auto video stabilization. \else 启用视频防抖动 \endif \since 1.16.1
     NvsStreamingEngineCaptureFlag_FaceActionWithParticle = 256,     //!< \if ENGLISH Uses facial action to control particle effects. \else 使用脸部动作控制粒子特效 \endif \since 2.1.0
-    NvsStreamingEngineCaptureFlag_DontAutomaticallyConfiguresApplicationAudioSession = 1024  //!< \if ENGLISH Does not apply automatically configures application audiosession . \else 不使用自动配置AudioSession \endif \since 2.12.0
+    NvsStreamingEngineCaptureFlag_DontAutomaticallyConfiguresApplicationAudioSession = 1024,  //!< \if ENGLISH Does not apply automatically configures application audiosession . \else 不使用自动配置AudioSession \endif \since 2.12.0
+    NvsStreamingEngineCaptureFlag_DisableFlipOfFrontCamera = 2048,  //!< \if ENGLISH Disable flip of front camera \else 禁止在前置摄像头上翻转画面 \endif
+    NvsStreamingEngineCaptureFlag_InputAspectRatioUsed = 4096,         //!< \if ENGLISH Capture preview size aspect ratio use user input \else 采集预览画面横纵比使用用户输入进行设置，如果Camera不支持当前的横纵比，找到最接近设置 \endif
+    NvsStreamingEngineCaptureFlag_EnableTakePicture = 8192         //!< \if ENGLISH Capture preview size aspect ratio use user input \else 采集预览画面横纵比使用用户输入进行设置，如果Camera不支持当前的横纵比，找到最接近设置 \endif
 } NvsStreamingEngineCaptureFlag;
 
 /*! \if ENGLISH
@@ -186,8 +192,23 @@ typedef enum
 {
     NvsStreamingEngineRecordingFlag_VideoIntraFrameOnly = 2,  //!< \if ENGLISH Records a video file containing I-Frame only. \else 录制仅包含I-Frame的视频文件 \endif
     NvsStreamingEngineRecordingFlag_OnlyRecordVideo = 16,     //!< \if ENGLISH Records only video stream. \else 仅录制视频流 \endif
-    NvsStreamingEngineRecordingFlag_IgnoreVideoRotation = 32  //!< \if ENGLISH Ignores video device rotation while recording. Remark：it has only effects when using the method of "startRecordingWithFx:". \else 录制时不根据设备的手持方向对视频做旋转。注意：必须用startRecordingWithFx进行录制才有效果 \endif
+    NvsStreamingEngineRecordingFlag_IgnoreVideoRotation = 32,  //!< \if ENGLISH Ignores video device rotation while recording. Remark：it has only effects when using the method of "startRecordingWithFx:". \else 录制时不根据设备的手持方向对视频做旋转。注意：必须用startRecordingWithFx进行录制才有效果 \endif
+    NvsStreamingEngineRecordingFlag_WithoutFxUseStreamingWriter = 256  //!< \if ENGLISH Video record without fx that be streaming writer used. Remark：it has only effects when using the method of "startRecording:". \else 使用StreamingWirter进行不带特效录制。注意：必须用startRecording进行录制才有效果 \endif
 } NvsStreamingEngineRecordingFlag;
+
+/*! \if ENGLISH
+ *  \brief Camera flash mode
+ *  \else
+ *  \brief 闪光灯模式
+ *  \endif
+*/
+typedef enum
+{
+    NvsCameraFlashMode_FlashOff = 1,  //!< \if ENGLISH Turns off photo flash \else 关闭拍照闪光灯 \endif
+    NvsCameraFlashMode_FlashOn = 2,   //!< \if ENGLISH Turns On photo flash \else 开启拍照闪光灯 \endif
+    NvsCameraFlashMode_FlashAuto = 4,  //!< \if ENGLISH Turns On the take photo to auto \else 开启拍照闪光灯自动模式 \endif
+    NvsCameraFlashMode_Torch = 8  //!< \if ENGLISH Turns On torch \else 开启补光灯 \endif
+} NvsCameraFlashMode;
 
 /*! \if ENGLISH
  *  \brief Flag of seeking engine
@@ -247,7 +268,8 @@ typedef enum {
  *  \endif
 */
 typedef enum {
-    NvsHumanDetectionDataType_FakeFace = 0
+    NvsHumanDetectionDataType_FakeFace = 0,
+    NvsHumanDetectionDataType_Makeup
 } NvsHumanDetectionDataTypeFlag;
 
 /*! \anchor RECORD_CONFIGURATIONS */
@@ -381,6 +403,21 @@ typedef enum {
  *  \since 1.16.0
 */
 - (void)didCaptureRecordingStarted:(unsigned int)captureDeviceIndex;
+
+/*! \if ENGLISH
+ *  \brief Recording first video frame is presented..
+ *  \param captureDeviceIndex Device index
+ *  \param timeStamp First video frame timestamp
+ *  \else
+ *  \brief 录制第一帧视频呈现
+ *  \param captureDeviceIndex 设备索引
+ *  \param timeStamp 录制第一帧视频帧的时间戳
+ *  \endif
+ *  \sa didCaptureRecordingFinished:
+ *  \sa didCaptureRecordingError:
+ *  \since 2.14.0
+*/
+- (void)didCaptureRecordingFirstVideoFrameReached:(unsigned int)captureDeviceIndex timeStamp:(int64_t)timestamp;
 
 /*! \if ENGLISH
  *  \brief Notification of recording's duration.
@@ -595,6 +632,42 @@ typedef enum {
 */
 - (void)captureVideoFrameGrabbedArrived:(NvsVideoFrameInfo*)sampleBufferInfo;
 
+/*! \if ENGLISH
+ *  \brief Gets the captured video frame.
+ *
+ *  Please pay attention: this function is called in a separate thread, not in the UI thread. Please consider thread-safe issues!!
+ *  \param sampleBufferInfo The obtained image data
+ *  \else
+ *  \brief 获取采集预览图像
+ *
+ *  请特别注意:这个函数被调用是在一个单独的线程,而不是在UI线程.使用请考虑线程安全的问题!!!
+ *  \param sampleBufferInfo 获取到的图像数据
+ *  \endif
+ *  \since 1.4.0
+*/
+- (void)capturePictureArrived:(NvsVideoFrameInfo*)sampleBufferInfo;
+
+@end
+
+@protocol NvsImageGrabberDelegate <NSObject>
+@optional
+
+/*! \if ENGLISH
+*  \brief Grab image from timeline.
+*
+*  Pay speical attention: this function is called in a seperate thread and not in the UI thread. Please consider the safety issues of threads!!
+*  \param buffer Frame data acquired.
+*  \param frameinfo Frame information acquired.
+*  \else
+*  \brief 获取时间线某一时间戳图像
+*
+*  请特别注意:这个函数被调用是在一个单独的线程,而不是在UI线程.使用请考虑线程安全的问题!!
+*  \param image 获取到的图像
+*  \param time 获取到的图像时间戳
+*  \endif
+*/
+- (void)onImageGrabbedArrived:(UIImage*)image timestamp:(int64_t)time;
+
 @end
 
 /*! \if ENGLISH
@@ -624,6 +697,7 @@ NVS_EXPORT @interface NvsStreamingContext : NSObject
 @property (nonatomic) float compileVideoBitrateMultiplier;              //!< \if ENGLISH Bitrate multiplier of compiling video. \else 生成视频码率倍乘系数 \endif \since 1.5.0
 @property (nonatomic) float recordVideoBitrateMultiplier;               //!< \if ENGLISH Bitrate multiplier of recording video. \else 录制视频码率倍乘系数 \endif \since 1.5.0
 @property (nonatomic) BOOL defaultCaptionFade;                          //!< \if ENGLISH Whether the default caption effect is fade in and out. \else 默认字幕是否为淡入淡出 \endif \since 1.8.0
+@property (nonatomic, weak) id<NvsImageGrabberDelegate> imageGrabberDelegate;
 
 /*! \if ENGLISH
  *  \brief Sets the timeline configurations, which stay valid once set. For key values in NSMutableDictionary, please refer to [Configuration of Compilation Timeline](@ref COMPILE_CONFIGURATIONS)
@@ -796,6 +870,15 @@ NVS_EXPORT @interface NvsStreamingContext : NSObject
 + (void)closeHumanDetection;
 
 /*! \if ENGLISH
+ *  \brief Gets the directory path of log file.
+ *  \else
+ *  \brief 获取日志文件所在路径
+ *  \endif
+ *  \since 2.14.0
+*/
++ (NSString *)getLogFileDirectory;
+
+/*! \if ENGLISH
  *  \brief Gets the EAGLSharegroup object used by the engine from the streaming context.
  *  \else
  *  \brief 从流媒体上下文中获取引擎所用的EAGLSharegroup对象
@@ -898,6 +981,18 @@ NVS_EXPORT @interface NvsStreamingContext : NSObject
  *  \endif
 */
 - (NSString*)registerFontByFilePath:(NSString *)fontFilePath;
+
+/*! \if ENGLISH
+ *  \brief Gets font file's font information
+ *  \param fontFilePath Font file path
+ *  \return Returns file's all font information
+ *  \else
+ *  \brief 获取字体文件中字体信息
+ *  \param fontFilePath 字体文件路径
+ *  \return 返回文件中所有字体的信息
+ *  \endif
+ */
+- (NSArray*)getFontInfoByFilePath:(NSString *)fontFilePath;
 
 /*! \if ENGLISH
  *  \brief Creates timeline.
@@ -1141,6 +1236,7 @@ NVS_EXPORT @interface NvsStreamingContext : NSObject
                          timestamp:(int64_t)timestamp
                         proxyScale:(const NvsRational *)proxyScale;
 
+
 /*! \if ENGLISH
  *  \brief Gets the image in the timeline of a certain timestamp. For details, refer to [The Topic of Video Frame Image Extraction] (@ref videoFrameRetriever.md).
  *  \param timeline The timeline object which gets the image
@@ -1159,6 +1255,31 @@ NVS_EXPORT @interface NvsStreamingContext : NSObject
  *  \since 1.16.0
 */
 - (UIImage *)grabImageFromTimeline:(NvsTimeline *)timeline timestamp:(int64_t)timestamp proxyScale:(const NvsRational *)proxyScale flags:(int)flags;
+
+/*! \if ENGLISH
+ *  \brief Gets the specific frame in timeline with a specific timestamp. For details please refer to [The video frame retriever] (@ref videoFrameRetriever.md).
+ *  This function is an internal asynchronous call. It is necessary to ensure that SeekTimeline () will not be invoked before getting the image. If the function that calls SeekTimeline after calling this function may not get the callback of the image, it can call Stop after this function to ensure that the Grab image can be executed successfully.
+ *  \param timeline The timeline that will be grabbed from.
+ *  \param timestamp The desired frame's timestamp(in microseconds). Timestamp should be within range [0,timeline.duration - 1]. Other inputs are invalid and will results grabImageFromTimeline returns null.
+ *  \param proxyScale Zoom scale of proxy
+ *  \param flags Flags for streaming engine seeking. For specific please refer to [The seek flag of streaming engine](@ref STREAMING_ENGINE_SEEK_FLAG).
+ *  \return Returns a boolean value.
+ *  \else
+ *  \brief 获取时间线某一时间戳的图像。详细情况参见[视频帧图像提取专题] (@ref videoFrameRetriever.md)
+ *   这个函数是内部异步调用,需要保证在获取到图像之前不会调用SeekTimeline(),如果在调用这个函数之后调用SeekTimeline的函数有可能收不到图像的回调，可以在这个函数之后调用Stop保证Grab image能执行成功
+ *  \param timeline 欲获取图像的时间线对象
+ *  \param timestamp 欲获取图像的时间戳（单位微秒）。timestamp取值范围在[0,timeline.duration - 1]。传入其他值无效，grabImageFromTimeline会返回null。
+ *  \param proxyScale 代理缩放比例
+ *  \param flags 引擎定位的特殊标志。具体参见[引擎定位标识](@ref STREAMING_ENGINE_SEEK_FLAG)
+ *  \return 返回布尔值,
+ *  \endif
+ *  \since 2.15.0
+ */
+
+- (BOOL)grabImageFromTimelineAsync:(NvsTimeline *)timeline
+                              timestamp:(int64_t)timestamp
+                             proxyScale:(const NvsRational *)proxyScale
+                                  flags:(int)flags;
 
 /*! \if ENGLISH
  *  \brief Playback timeline
@@ -1569,6 +1690,28 @@ NVS_EXPORT @interface NvsStreamingContext : NSObject
 - (BOOL)isFlashOn;
 
 /*! \if ENGLISH
+ *  \brief Sets the flash mode.
+ *  \param mode flash mode value, please refer to [Flash Mode](@ref CAMERA_FLASH_MODE)
+ *  \else
+ *  \brief 切换闪光灯模式
+ *  \param mode 闪光灯模式值。请参见[闪光灯模式](@ref CAMERA_FLASH_MODE)。
+ *  \endif
+ *  \sa getFlashMode
+*/
+- (void)toggleFlashMode:(NvsCameraFlashMode)mode;
+
+/*! \if ENGLISH
+ *  \brief get state of the flash light.
+ *  \return Returns flash mode value, please refer to [Flash Mode](@ref CAMERA_FLASH_MODE)
+ *  \else
+ *  \brief 获取当前闪光灯模式
+ *  \return 闪光灯模式值。请参见[闪光灯模式](@ref CAMERA_FLASH_MODE)。
+ *  \endif
+ *  \sa toggleFlashMode
+*/
+- (NvsCameraFlashMode)getFlashMode;
+
+/*! \if ENGLISH
  *  \brief Gets the current video’s stabilization flag.
  *  \return Returns the current flag.
  *  \else
@@ -1976,6 +2119,16 @@ NVS_EXPORT @interface NvsStreamingContext : NSObject
 - (BOOL)isRecordingPaused;
 
 /*! \if ENGLISH
+ *  \brief Take picture
+ *  \param flags  take picture flag. value is 0
+ *  \else
+ *  \brief 拍摄照片
+ *  \param flags 拍照的标志，目前没有使用， 值为0
+ *  \endif
+*/
+- (BOOL)takePicture:(int)flags;
+
+/*! \if ENGLISH
  *  \brief Gets the list of all built-in video effect names.
  *  \return Returns an array object containing all the built-in video effects’ names.
  *  \else
@@ -2166,6 +2319,54 @@ NVS_EXPORT @interface NvsStreamingContext : NSObject
  *  \endif
 */
 - (void)setCaptureFps:(int)fps;
+/*! \endcond */
+
+/*! \cond */
+/*! \if ENGLISH
+ *  \brief set image reader count.
+ *  \param count the image reader
+ *  \else
+ *  \brief 设置image reader 最大个数。
+ *  \param image reader 最大个数
+ *  \endif
+*/
+- (void)setImageReaderCount:(int)count API_DEPRECATED("Use +setMaxImageReaderCount:", macos(10.3, 10.11), ios(7.0, 8.0));
+/*! \endcond */
+
+/*! \cond */
+/*! \if ENGLISH
+ *  \brief set max image reader count.
+ *  \param count the max image reader
+ *  \else
+ *  \brief 设置max image reader 最大个数。
+ *  \param max image reader 最大个数
+ *  \endif
+*/
++ (void)setMaxImageReaderCount:(int)count;
+/*! \endcond */
+
+/*! \cond */
+/*! \if ENGLISH
+ *  \brief set max audio reader count.
+ *  \param max count the audio reader
+ *  \else
+ *  \brief 设置 audio reader 最大个数。
+ *  \param audio reader 最大个数
+ *  \endif
+*/
++ (void)setMaxAudioReaderCount:(int)count;
+/*! \endcond */
+
+/*! \cond */
+/*! \if ENGLISH
+ *  \brief set max file reader count.
+ *  \param max count the file reader
+ *  \else
+ *  \brief 设置 file reader 最大个数。
+ *  \param file reader 最大个数
+ *  \endif
+*/
++ (void)setMaxReaderCount:(int)count;
 /*! \endcond */
 
 @end
