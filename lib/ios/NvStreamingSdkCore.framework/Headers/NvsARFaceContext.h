@@ -27,6 +27,12 @@ typedef enum
 } NvsObjectTrackingType;
 
 
+typedef enum
+{
+    NvsObjectLandmarkType_Face = 0,        //!< \if ENGLISH face landmark \else 人脸标记点 \endif
+    NvsObjectLandmarkType_Animal           //!< \if ENGLISH animal landmark \else 动物标记点 \endif
+} NvsObjectLandmarkType;
+
 @protocol NvsARFaceContextDelegate <NSObject>
 @optional
 
@@ -48,15 +54,29 @@ typedef enum
  */
 - (void)notifyFaceItemLoadingFinish ;
 
-#if defined(NV_ENABLE_AI) && defined(NV_AI_ST)
-    /*! \if ENGLISH
+/*! \if ENGLISH
      *  \brief Notifies the error of loading face props
      *  \else
      *  \brief 通知人脸道具加载出错
      *  \endif
      */
-    - (void)notifyFaceItemLoadingFailed:(NSString *)itemPath error:(int) error ;
-#endif
+- (void)notifyFaceItemLoadingFailed:(NSString *)itemPath error:(int) error ;
+
+/*! \if ENGLISH
+ *  \brief Notifies that item landmark.
+ *  \param landmark object landmark
+ *  \param objectCount,
+ *  \param objectType (face or animal)
+ *  \param timestamp landmark timestamp
+ *  \else
+ *  \brief 标记点回调
+ *  \param landmark 标记点数据
+ *  \param landmarkSize 包含标记点的物体数量
+ *  \param objectType 包含标记点的物体类型(人脸或者猫脸)
+ *  \param timestamp 获取到标记点时间戳
+ *  \endif
+ */
+- (void)notifyObjectLandmark:(NSArray*)landmark size:(int)landmarkSize type:(NvsObjectLandmarkType)type timeStamp:(int64_t)timestamp;
 
 @end
 

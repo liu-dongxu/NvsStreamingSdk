@@ -25,8 +25,8 @@ NVS_EXPORT @interface NvsSmartCutClipData : NSObject
 
 @property (nonatomic, assign)   int                 templateSlotIndex;
 @property (nonatomic, copy)     NSString*           videoFilePath;
-@property (nonatomic, assign)   long                trimIn;
-@property (nonatomic, assign)   long                trimOut;
+@property (nonatomic, assign)   uint64_t            trimIn;
+@property (nonatomic, assign)   uint64_t            trimOut;
 @property (nonatomic, assign)   BOOL                nospeed;
 @property (nonatomic, assign)   BOOL                isImage;
 @property (nonatomic, assign)   BOOL                imageMotion;
@@ -38,7 +38,8 @@ NVS_EXPORT @interface NvsSmartCutCaptionInfo : NSObject
 @property (nonatomic, assign)   int                 templateSlotIndex;
 @property (nonatomic, copy)     NSString*           text;
 @property (nonatomic, copy)     NSString*           style;
-@property (nonatomic, assign)   long                duration;
+@property (nonatomic, assign)   uint64_t            duration;
+@property (nonatomic, assign)   uint64_t            startOffset;
 
 @end
 
@@ -46,7 +47,7 @@ NVS_EXPORT @interface NvsSmartCutTransitionInfo : NSObject
 
 @property (nonatomic, assign)   int                 templateSlotIndex;
 @property (nonatomic, copy)     NSString*           name;
-@property (nonatomic, assign)   long                duration;
+@property (nonatomic, assign)   uint64_t            duration;
 
 @end
 
@@ -54,13 +55,13 @@ NVS_EXPORT @interface NvsSmartCutFilterInfo : NSObject
 
 @property (nonatomic, assign)   int                 templateSlotIndex;
 @property (nonatomic, copy)     NSString*           name;
-@property (nonatomic, assign)   long                duration;
+@property (nonatomic, assign)   uint64_t            duration;
 
 @end
 
 NVS_EXPORT @interface NvsSmartCutSpeedInfo : NSObject
 
-@property (nonatomic, assign)   long                duration;
+@property (nonatomic, assign)   uint64_t            duration;
 @property (nonatomic, assign)   float               speed0;
 @property (nonatomic, assign)   float               speed1;
 

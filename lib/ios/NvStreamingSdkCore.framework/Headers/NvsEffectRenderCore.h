@@ -32,7 +32,8 @@ typedef enum {
     NvsInitializeFlag_InSingleGLThread = 1,
     NvsInitializeFlag_CreateGLContextIfNeed = 2,
     NvsInitializeFlag_SUPPORT_4K = 4,
-    NvsInitializeFlag_SUPPORT_8K = 8
+    NvsInitializeFlag_SUPPORT_8K = 8,
+    NvsInitializeFlag_SUPPORT_16K = 16
 } NvsInitializeFlags;
 
 typedef enum {

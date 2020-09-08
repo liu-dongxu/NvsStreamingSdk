@@ -70,10 +70,20 @@ NVS_EXPORT @interface NvsMultiThumbnailSequenceView : UIScrollView<NvsIconGenera
 @property (nonatomic) NvsThumbnailImageFillMode thumbnailImageFillMode; //!< \if ENGLISH Thumbnail image fill mode \else 缩略图图片填充模式 \endif
 @property (nonatomic) int64_t maxTimelinePosToScroll;                   //!< \if ENGLISH The maximum timeline position (in microseconds) that is allowed to scroll. The default value is 0, which means no limit. \else 允许滚动的最大时间线位置(单位微秒)，默认值为0，表示不做限制 \endif
 
-
 - (instancetype)init;
 - (instancetype)initWithFrame:(CGRect)frame;
 - (instancetype)initWithCoder:(NSCoder *)aDecoder;
+
+/*! \if ENGLISH
+ *  \brief Set up edit mode, contentOffset and contentSize shoule be reset
+ *  \param height Height of thumbnail image
+ *  \else
+ *  \brief 设置编辑模式可用  编辑模式下，需要外部管理contentOffsize和contentSize
+ *  \param height 缩略图区域高度
+ *  \endif
+ *  \sa reloadClipData
+*/
+-(void)enableClipEditModeWithThumnailHeight:(CGFloat)height;
 
 /*! \if ENGLISH
  *  \brief Maps the X coordinate of the control to the timeline position.

@@ -15,6 +15,21 @@
 #import <Foundation/Foundation.h>
 #import "NvsCommonDef.h"
 
+
+typedef enum {
+    FaceType_BACKGROUNDSEGMENTATION=1<<1,
+    FaceType_HAIRSEGMENTATION=1<<2,
+    FaceType_HANDGESTURE=1<<3,
+    FaceType_TONGUETRACKING=1<<4,
+    FaceType_FACELANDMARKS75=1<<5,
+    FaceType_FACELANDMARKS209=1<<6,
+    FaceType_FACELANDMARKS239=1<<7,
+    FaceType_HUMANPOSE2D=1<<8,
+    FaceType_BACKGROUNDSEGMENTATION_GREEN=1<<9,
+    FaceType_FACEPROCESSOR=1<<10
+}FaceType;
+
+
 NVS_EXPORT @interface NvsFaceEffectV1 : NSObject
 
 /*! \if ENGLISH
@@ -40,6 +55,12 @@ NVS_EXPORT @interface NvsFaceEffectV1 : NSObject
  *  \endif
 */
 +(void) SetMaxFaces:(int) maxFaceCount;
+
++(void) LoadAiModule:(NSString *)bundlePath faceType:(FaceType)faceType ;
+
++(int) ReleaseAiModule:(FaceType)faceType ;
+
++(int) IsAIModelLoaded:(FaceType)faceType ;
 
 +(void) done;
 

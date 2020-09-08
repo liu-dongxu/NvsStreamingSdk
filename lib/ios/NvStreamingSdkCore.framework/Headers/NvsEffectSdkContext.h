@@ -52,7 +52,8 @@ typedef enum {
 *   \endif
 */
 typedef enum {
-    NvsEffectSdkHumanDetectionDataType_FakeFace = 0
+    NvsEffectSdkHumanDetectionDataType_FakeFace = 0,
+    NvsEffectSdkHumanDetectionDataType_Makeup
 } NvsEffectSdkHumanDetectionDataTypeFlag;
 
 /*! \if ENGLISH
@@ -176,6 +177,21 @@ NVS_EXPORT @interface NvsEffectSdkContext : NSObject
 */
 - (NvsVideoEffect *)createVideoEffect:(NSString *)effectId aspectRatio:(NvsEffectRational)aspectRatio;
 
+/*! \if ENGLISH
+ *  \brief Creates a special effect object.
+ *  \param effectId Special effects ID. For build-in video effects, it is the name of the effect. If it is a resource package effect, it is the resource package ID.
+ *  \param aspectRatio Aspect ratio
+ *  \param realTime realTime mode
+ *  \return Returns the created special effect object.
+ *  \else
+ *  \brief 创建特效对象
+ *  \param effectId 特效id。对于内嵌视频特效，就是特效的名字，如果是资源包特效，就是资源包id
+ *  \param aspectRatio 横纵比
+ *  \param realTime 实时模式
+ *  \return 返回创建的特效对象
+ *  \endif
+*/
+- (NvsVideoEffect *)createVideoEffect:(NSString *)effectId aspectRatio:(NvsEffectRational)aspectRatio realTime:(BOOL)realTime;
 /*! \if ENGLISH
  *  \brief Creates a special effect rendering object.
  *  \return Returns the created effect rendering object.
