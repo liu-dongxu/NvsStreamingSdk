@@ -528,4 +528,52 @@ NVS_EXPORT @interface NvsEffect : NSObject
 */
 - (NvsARSceneManipulate *)getARSceneManipulate;
 
+/*! \if ENGLISH
+ *  \brief Sets the value of the defined parameter in the expression.
+ *  \param varName The parameters defined in the expression
+ *  \param varValue The value of a parameter in an expression
+ *  \else
+ *  \brief 设置表达式中定义参数的值
+ *  \param varName 表达式中定义的参数
+ *  \param varValue 表达式中参数对应的值
+ *  \endif
+ *  \since 2.16.1
+ */
+- (void)setExprVar:(NSString *)varName varValue:(double)varValue;
+
+/*! \if ENGLISH
+ *  \brief Gets the value of the defined parameter in the expression.
+ *  \param varName The parameters defined in the expression
+ *  \return Returns the value of the parameter defined in the expression
+ *  \else
+ *  \brief 获得表达式中定义参数的值
+ *  \param varName 表达式中定义的参数
+ *  \return 返回表达式中定义参数的值
+ *  \endif
+ *  \since 2.16.1
+ */
+- (double)getExprVar:(NSString *)varName;
+
+/*! \if ENGLISH
+ *  \brief Clears the value of the defined parameter in the expression and sets it to the default value of 0.
+ *  \param varName The parameters defined in the expression
+ *  \else
+ *  \brief 清空表达式中定义参数的值，并设置为默认值0
+ *  \param varName 表达式中定义的参数
+ *  \endif
+ *  \since 2.16.1
+ */
+- (void)clearExprVar:(NSString *)varName;
+
+/*! \if ENGLISH
+ *  \brief Clears the value of all parameters defined in the expression and sets it to the default value of 0.
+ *  \param varName The parameters defined in the expression
+ *  \else
+ *  \brief 清空表达式中定义的全部参数的值，并设置为默认值0
+ *  \param varName 表达式中定义的参数
+ *  \endif
+ *  \since 2.16.1
+ */
+- (void)clearExprVarCtx;
+
 @end

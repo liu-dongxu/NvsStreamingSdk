@@ -91,6 +91,28 @@ NVS_EXPORT @interface NvsTimelineVideoFx : NvsFx
 - (void)movePosition:(int64_t)offset;
 
 /*! \if ENGLISH
+ *  \brief Sets video fx Z value.
+ *  \param value Z value
+ *  \else
+ *  \brief 设置时间线视频特效Z值
+ *  \param value z值
+ *  \endif
+ *  \since 2.17.0
+ */
+- (void)setZValue:(float)value;
+
+/*! \if ENGLISH
+ *  \brief Gets video fx Z value.
+ *  \return Returns video fx Z value.
+ *  \else
+ *  \brief 获取时间线视频特效Z值
+ *  \return 返回时间线视频特效Z值
+ *  \endif
+ *  \since 2.17.0
+ */
+- (float)getZValue;
+
+/*! \if ENGLISH
  *  \brief Converts the timeline coordinates to the particle system coordinates.
  *  \param ptCononical Timeline coordinates
  *  \return Returns the CGPoint object of the particle system coordinate after transforming.

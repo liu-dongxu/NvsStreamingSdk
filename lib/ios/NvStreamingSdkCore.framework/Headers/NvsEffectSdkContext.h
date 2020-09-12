@@ -129,6 +129,23 @@ NVS_EXPORT @interface NvsEffectSdkContext : NSObject
                   features:(int)features;
 
 /*! \if ENGLISH
+ *  \brief Human detection initialization extension.
+ *  \param modelFilePath Path of the model file
+ *  \param licenseFilePath Path of the license file
+ *  \param features human detection flag field. Please refer to [Flag of human detection](@ref NvsEffectSdkHumanDetectionFeatureFlag).
+ *  \else
+ *  \brief 初始化人体检测机制
+ *  \param modelFilePath 人脸模型文件路径
+ *  \param licenseFilePath 授权文件路径
+ *  \param features 人体检测特征标志字段。请参见[人体检测特征标志](@ref NvsEffectSdkHumanDetectionFeatureFlag)
+ *  \endif
+ *  \since 2.5.0
+*/
++ (BOOL)initHumanDetectionExt:(NSString *)modelFilePath
+              licenseFilePath:(NSString *)licenseFilePath
+                     features:(int)features;
+
+/*! \if ENGLISH
 *   \brief Setup human detection data package.
 *   \param dataType Human detection data package type.Please refer to[Human detection data packet type](@ref NvsEffectSdkHumanDetectionDataTypeFlag).
 *   \param dataFilePath The file path of data

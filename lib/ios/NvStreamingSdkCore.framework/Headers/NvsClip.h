@@ -138,6 +138,34 @@ NVS_EXPORT @interface NvsClip : NvsObject
 - (void)changeSpeed:(double)newSpeed keepAudioPitch:(BOOL)keepAudioPitch;
 
 /*! \if ENGLISH
+ *  \brief Changes the playback speed of the clip by curves(only support for video clip).
+ *  \param curvesString description of the variable speed curves.
+ *  \string foramt : (endpoint1)(endpoint1.backward)(endpoint1.frontward)(endpoint2)(endpoint2.backward)(endpoint2.frontward)……
+ *  \coords foramt : (x,y)
+ *  \note1 : the y coords means the multiple speed. the range of y is 0.1 to 10
+ *  \note2 : all x coord values cannot be repeated. endpoint1.backward.x < endpoint1.x < endpoint1.frontward.x < endpoint2.backward.x <endpoint2.x……
+ *  \note3 : if you set an empty  curvesString,it means you want to disable curves variable speed,the clip will back to const speed.
+ *  \eg : curvesString = "(0,1)(-3,1)(3,1)(7,5)(6,5)(8,5)(10,0.4)(9,0.4)(11,0.4)(17,0.4)(16,0.4)(18,0.4)(20,5)(19,5)(21,5)(27,1)(24,1)(30,1)" curvesString included 6 group end point info .
+ *  \param keepAudioPitch Keep the tone unchanged.
+ *  \warning This interface will cause the streaming engine state to jump to the engine stop state, see [Engine Change Feature] (\ref EngineChange.md) for details.
+ *  \since 2.17.0
+ *  \else
+ *  \brief 使用贝塞尔曲线改变片段的播放速度(仅支持视频片段)
+ *  \param curvesString 贝塞尔曲线描述字符串
+ *  \字符串格式：(端点1坐标)(端点1后控制点坐标)(端点1前控制点坐标)(端点2坐标)(端点2后控制点坐标)(端点2前控制点坐标)(端点3坐标)(端点3后控制点坐标)(端点3前控制点坐标)……
+ *  \坐标格式：(坐标X值，坐标Y值)
+ *  \注1：Y坐标为播放倍速值，范围在0.1-10之间。
+ *  \注2：每个端点及控制点的X坐标必须不能相等。大小规定为：端点1后控制点的X坐标 < 端点1的X坐标 <端点1的前控制点的X坐标 < 端点2后控制点的X坐标 < 端点2的X坐标……
+ *  \注3：如果设置的curvesString为空字符串，则表示对该片段取消之前的曲线变速，恢复到匀速状态。
+ *  \例如：curvesString = "(0,1)(-3,1)(3,1)(7,5)(6,5)(8,5)(10,0.4)(9,0.4)(11,0.4)(17,0.4)(16,0.4)(18,0.4)(20,5)(19,5)(21,5)(27,1)(24,1)(30,1)"包含了6组端点及其控制点坐标信息。
+ *  \param keepAudioPitch 保持音调不变
+ *  \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
+ *  \since 2.17.0
+ *	\endif
+ */
+- (BOOL)changeCurvesVariableSpeed:(NSString *)curvesString keepAudioPitch:(BOOL)keepAudioPitch;
+
+/*! \if ENGLISH
  *  \brief Set the channels (left and right).
  *  \param leftVolumeGain The left channel value to be set, the range value is [0, 4).
  *  \param rightVolumeGain The right channel value to be set, the range value is [0, 4).

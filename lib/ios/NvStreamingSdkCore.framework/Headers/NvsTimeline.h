@@ -258,6 +258,34 @@ NVS_EXPORT @interface NvsTimeline : NvsObject
 - (void)setCaptionBoundingRectInActualMode:(BOOL)isActualBoundingRect;
 
 /*! \if ENGLISH
+ *  \brief Turn on use the Z value as the render order.
+    Note: there are timeline caption, compound caption, module captions, animation stickers and timeline filters
+    If the Z value in the same type is the same, it is the same as the sorting method in which the property is not enabled
+    If the Z values of different types are the same, the order is: timeline Filter > Animation sticker > timeline caption (including module caption) > compound caption
+ *  \param enable Enable or not
+ *  \else
+ *  \brief 开启使用Z值作为渲染顺序
+     重要提示：参与排序的有时间线字幕，复合字幕，模块字幕，动画贴纸和时间线滤镜
+     如果同一种类型中的Z值是相同的，和没有开启这个属性的排序方式是一致的
+     如果不同类型的Z值是相同的，排列顺序为：时间线滤镜->动画贴纸->时间线字幕(包含模块字幕)->复合字幕
+ *  \param enable 是否开启
+ *  \endif
+ *  \since 2.17.0
+*/
+- (void)enableRenderOrderByZValue:(BOOL)enable;
+
+/*! \if ENGLISH
+*  \brief Whether to turn on use Z value as the rendering order.
+*  \return Returns True means has turn on, otherwise not
+*  \else
+*  \brief 是否开启使用Z值作为渲染顺序
+*  \return  是否开启
+*  \endif
+*  \since 2.17.0
+*/
+- (BOOL)isRenderOrderByZValueEnabled;
+
+/*! \if ENGLISH
  *  \brief Get the first caption on the timeline.
  *  \return Returns the NvsTimelineCaption object.
  *  \else

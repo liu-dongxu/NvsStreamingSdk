@@ -52,6 +52,7 @@ typedef enum {
 #define NVS_MEDIA_CONVERTOR_NO_AUDIO                        @"convertor-no-audio"           //!< \if ENGLISH only convert video stream \else 只进行视频转码 \endif
 #define NVS_MEDIA_CONVERTOR_CUSTOM_AUDIO_CHANNEL            @"custom-audio-channel"         //!< \if ENGLISH Set custom audio channels \else 设置自定义音频通道数\endif
 #define NVS_MEDIA_CONVERTOR_REVERSE_AUDIO_STREAM            @"convertor-reverse-audio"      //!< \if ENGLISH  Reverse audio stream \else 倒放音频流\endif
+#define NVS_MEDIA_CONVERTOR_MAX_CACHE_SIZE_IN_MEMORY        @"max_cache_size_in_memory"     //!< \if ENGLISH max cache video frame buffer count in host memory \else 在内存中缓存的视频帧数量 \endif
 //!@}
 //!
 
