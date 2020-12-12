@@ -16,4 +16,6 @@ Pod::Spec.new do |s|
   s.ios.vendored_frameworks = "lib/**/NvStreamingSdkCore.framework"
   s.requires_arc       = true
   s.xcconfig = {"ENABLE_BITCODE" => "NO"}
+  s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
+  s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
 end
