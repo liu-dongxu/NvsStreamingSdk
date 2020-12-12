@@ -11,9 +11,11 @@ Pod::Spec.new do |s|
   s.author       = { "liu-dongxu" => "liu_dongxu@cdv.com" }
   s.platform     = :ios, "9.0"
   s.source       = { :git => "https://github.com/liu-dongxu/NvsStreamingSdk.git", :tag => s.version}
-  s.source_files = "lib/**/NvStreamingSdkCore.framework/Headers/*.h"
+  s.source_files = "lib/ios/NvStreamingSdkCore.framework/Headers/*.h"
   s.public_header_files = "lib/ios/NvStreamingSdkCore.framework/Headers/*.h"
   s.ios.vendored_frameworks = "lib/ios/NvStreamingSdkCore.framework"
+  s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
+  s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
   s.requires_arc       = true
   s.xcconfig = {"ENABLE_BITCODE" => "NO"}
 end
