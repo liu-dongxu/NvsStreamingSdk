@@ -9,8 +9,9 @@ Pod::Spec.new do |s|
   s.homepage     = "https://www.meishesdk.com"
   s.license      = { :type => "MIT", :file => "LICENSE" }
   s.author       = { "liu-dongxu" => "liu_dongxu@cdv.com" }
-  s.platform     = :ios, "8.0"
+  s.platform     = :ios, "9.0"
   s.source       = { :git => "https://github.com/liu-dongxu/NvsStreamingSdk.git", :tag => s.version}
+  s.source_files = "lib/**/NvStreamingSdkCore.framework/Headers/*.h"
   s.public_header_files = "lib/ios/NvStreamingSdkCore.framework/Headers/*.h"
   s.ios.vendored_frameworks = "lib/ios/NvStreamingSdkCore.framework"
   s.requires_arc       = true
