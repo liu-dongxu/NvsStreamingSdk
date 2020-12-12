@@ -40,6 +40,16 @@ typedef enum {
     NvsRegionCoordinateSystemType_Timeline = 1          //!< \if ENGLISH timeline coordinate system \else timeline坐标系 \endif
 } NvsRegionCoordinateSystemType;
 
+/*! \if ENGLISH
+ *  @name Face Warp Effect Strategy
+ *  \else
+ *  @name 人脸变形特效策略
+ *  \endif
+ */
+typedef enum {
+    NvsFaceWarpEffectStrategy_Custom = 0x7FFFFFFF       //!< \if ENGLISH Face warp effect custom strategy \else 人脸变形特效自定义策略 \endif
+} NvsFaceWarpEffectStrategy;
+
 @class NvsArbitraryData;
 @class NvsFxDescription;
 @class NvsParticleSystemContext;
@@ -819,10 +829,10 @@ NVS_EXPORT @interface NvsFx : NvsObject
 -(NvsMaskRegionInfo *)getRegionInfoAtTime:(int64_t)time;
 
 /*! \if ENGLISH
- *  \brief Sets the feather width of this regional filter.
+ *  \brief Sets the feather width of this regional filter(0-1000).
  *  \param featherWidth feather width of regional filter
  *  \else
- *  \brief 设置局部滤镜的羽化宽度
+ *  \brief 设置局部滤镜的羽化宽度(0-1000)
  *  \param featherWidth 局部滤镜的羽化宽度
  *  \endif
  *  \sa getRegionalFeatherWidth

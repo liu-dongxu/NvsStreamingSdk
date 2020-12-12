@@ -166,6 +166,42 @@ NVS_EXPORT @interface NvsClip : NvsObject
 - (BOOL)changeCurvesVariableSpeed:(NSString *)curvesString keepAudioPitch:(BOOL)keepAudioPitch;
 
 /*! \if ENGLISH
+ *  \brief get current variable speed curves of clip.
+ *  \warning the x coords at the each output curves' endpoint is relative,user can scale x to any size. eg: scale curves range to equal with clip length.
+ *  \sa changeCurvesVariableSpeed
+ *  \since 2.17.0
+ *  \else
+ *  \brief 获得当前片段的变速曲线字符串
+ *  \warning 获得的贝塞尔曲线中各点数据的横坐标均为相对位置关系，用户可以按需伸缩横轴坐标的比例，比如将曲线拉长到clip的长度。
+ *  \sa changeCurvesVariableSpeed
+ *  \since 2.17.0
+ *	\endif
+ */
+- (NSString *)getClipVariableSpeedCurvesString;
+
+/*! \if ENGLISH
+ *  \brief Gets the pos in clip by current timeline pos when used curves variable speed.
+ *  \return Returns long value to indicate the clip pos,return -1 indicate failed .
+ *  \else
+ *  \brief 在曲线变速状态下，通过给定时间线位置返回片段上的位置。
+ *  \return 返回long 表示片段上的位置，返回-1表示失败。
+ *	\endif
+ *  \since 2.17.0
+ */
+- (int64_t)getClipPosByTimelinePosCurvesVariableSpeed:(int64_t) timelinePos;
+
+/*! \if ENGLISH
+ *  \brief Gets the pos in timeline by current clip pos when used curves variable speed.
+ *  \return Returns long value to indicate the timeline pos,return -1 indicate failed .
+ *  \else
+ *  \brief 在曲线变速状态下，通过给定片段上位置返回时间线位置。
+ *  \return 返回long 表示时间线上的位置，返回-1表示失败。
+ *	\endif
+ *  \since 2.17.0
+ */
+- (int64_t)getTimelinePosByClipPosCurvesVariableSpeed:(int64_t) clipPos;
+
+/*! \if ENGLISH
  *  \brief Set the channels (left and right).
  *  \param leftVolumeGain The left channel value to be set, the range value is [0, 4).
  *  \param rightVolumeGain The right channel value to be set, the range value is [0, 4).

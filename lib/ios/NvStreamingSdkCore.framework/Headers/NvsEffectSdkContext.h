@@ -17,6 +17,7 @@
 #import "NvsVideoEffect.h"
 #import "NvsEffectRenderCore.h"
 #import "NvsEffectCommonDef.h"
+@class NvsHumanDetectionHandle;
 
 /*! \if ENGLISH
 *   \brief Effect SDK context creation flag.
@@ -42,7 +43,8 @@ typedef enum {
     NvsEffectSdkHumanDetectionFeature_ImageMode = 16,
     NvsEffectSdkHumanDetectionFeature_MultiThread = 32,
     NvsEffectSdkHumanDetectionFeature_SingleThread = 64,
-    NvsEffectSdkHumanDetectionFeature_Extra = 128
+    NvsEffectSdkHumanDetectionFeature_Extra = 128,
+    NvsEffectSdkHumanDetectionFeature_Background = 256
 } NvsEffectSdkHumanDetectionFeatureFlag;
 
 /*! \if ENGLISH
@@ -139,7 +141,7 @@ NVS_EXPORT @interface NvsEffectSdkContext : NSObject
  *  \param licenseFilePath 授权文件路径
  *  \param features 人体检测特征标志字段。请参见[人体检测特征标志](@ref NvsEffectSdkHumanDetectionFeatureFlag)
  *  \endif
- *  \since 2.5.0
+ *  \since 2.17.1
 */
 + (BOOL)initHumanDetectionExt:(NSString *)modelFilePath
               licenseFilePath:(NSString *)licenseFilePath
@@ -169,6 +171,51 @@ NVS_EXPORT @interface NvsEffectSdkContext : NSObject
 *   \since 2.5.0
 */
 + (void)closeHumanDetection;
+
+/*! \if ENGLISH
+ *  \brief Creates human detection handle
+ *  \param modelFilePath The path of face modle file.
+ *  \param licenseFilePath The path of authorization file.
+ *  \param config Human detection configuration, please refer to [HUMAN_DETECTION_FEATURE_FACE_LANDMARK].
+ *  \return Returns handle created
+ *  \else
+ *  \brief 创建人体检测句柄
+ *  \param modelFilePath 模型文件路径
+ *  \param licenseFilePath 授权文件路径
+ *  \param features 人体检测特征标志字段。请参见[人体检测特征](@ref HUMAN_DETECTION_FEATURE_FACE_LANDMARK)
+ *  \return 返回创建的句柄
+ *  \endif
+ *  \sa destroyHumanDetectionHandle:
+ */
+- (NvsHumanDetectionHandle*)createHumanDetectionHandle:(NSString*)modelFilePath licenseFilePath:(NSString*)licenseFilePath config:(int64_t)config;
+
+/*! \if ENGLISH
+ *  \brief Extends human detection handle
+ *  \param handle Human detection handle to be extended.
+ *  \param modelFilePath The path of extra modle file.
+ *  \param licenseFilePath The path of authorization file.
+ *  \param config Human detection configuration, please refer to [HUMAN_DETECTION_FEATURE_FACE_LANDMARK].
+ *  \return Returns a boolean value. true for success, false for failure.
+ *  \else
+ *  \param handle 需要功能扩展的人体检测句柄.
+ *  \param modelFilePath 扩展模型文件路径
+ *  \param licenseFilePath 授权文件路径
+ *  \param features 人体检测特征标志字段。请参见[人体检测特征](@ref HUMAN_DETECTION_FEATURE_FACE_LANDMARK)
+ *  \return 成功返回true, 失败返回false.
+ *  \endif
+ */
+- (BOOL)ExtendHumanDetectionHandle:(NvsHumanDetectionHandle *)handle modelFilePath:(NSString *)modelFilePath licenseFilePath:(NSString *)licenseFilePath config:(int64_t)config;
+
+/*! \if ENGLISH
+ *  \brief Destroy human detection handle
+ *  \param handle Human detection handle to be destroyed.
+ *  \else
+ *  \brief 销毁人体检测句柄
+ *  \param handle 需要销毁的人体检测句柄.
+ *  \endif
+ *  \sa createHumanDetectionHandle
+ */
+- (BOOL)destroyHumanDetectionHandle:(NvsHumanDetectionHandle *)handle;
 
 /*! \if ENGLISH
  *  \brief Gets a list of all build-in video effects' names.

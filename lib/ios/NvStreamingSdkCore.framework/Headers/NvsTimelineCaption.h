@@ -37,7 +37,7 @@ NVS_EXPORT @interface NvsTimelineCaption : NvsFx
 @property (readonly) int64_t outPoint;                //!< \if ENGLISH The out point of the caption on the timeline (in microseconds) \else 字幕在时间线显示上的出点（单位微秒） \endif
 @property (readonly) NvsRoleInTheme roleInTheme;      //!< \if ENGLISH The role of captions in the theme (general, title, and trailer.) \else 字幕在主题中的角色(通用、片头、片尾) \endif
 @property (readonly) NvsCategory category;            //!< \if ENGLISH Clip type \else 片段类型 \endif
-@property (readonly) NSString* captionStylePackageId; //!< \if ENGLISH The package ID of the caption style\else 字幕样式包裹ID \endif
+@property (readonly) NSString* captionStylePackageId; //!< \if ENGLISH The package ID of the caption style\else 字幕样式包裹ID \endif \since 2.17.1
 @property (readonly) NSString* modularCaptionContextPackageId;      //!< \if ENGLISH The package ID of the modular caption context style \else 模块字幕环境样式包裹ID \endif \since 2.15.2
 @property (readonly) NSString* modularCaptionRendererPackageId;     //!< \if ENGLISH The package ID of the modular caption render style \else 模块字幕渲染样式包裹ID \endif \since 2.15.2
 @property (readonly) NSString* modularCaptionAnimationPackageId;    //!< \if ENGLISH The package ID of the modular caption animation style \else 模块字幕循环动画样式包裹ID \endif \since 2.15.2

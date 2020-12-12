@@ -27,15 +27,15 @@
  *  \brief Picture get callback.
  *  \param icon Current icon
  *  \param timestamp Current timestamp
- *  \param timestamp Current taskId
+ *  \param taskId Current taskId
  *  \else
  *  \brief 图片获取回调
  *  \param icon 当前图片
  *  \param timestamp 当前的时间点
- *  \param timestamp 当前任务
+ *  \param taskId 当前任务
  *  \endif
 */
-- (void)didIconReady:(UIImage *)icon timestamp:(int64_t)timestamp taskId:(int64_t)timestamp;
+- (void)didIconReady:(UIImage *)icon timestamp:(int64_t)timestamp taskId:(int64_t)taskId;
 
 @end
 

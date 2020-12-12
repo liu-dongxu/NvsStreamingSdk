@@ -102,6 +102,8 @@ typedef enum {
 
 - (void)resetSkinColor;
 
+- (void)setDetectionAutoProbe:(bool)autoProbe;
+
 - (void)setInternalObject:(void *)internalObject;
 
 @end

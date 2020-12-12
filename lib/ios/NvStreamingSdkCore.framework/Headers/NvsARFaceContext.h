@@ -33,6 +33,35 @@ typedef enum
     NvsObjectLandmarkType_Animal           //!< \if ENGLISH animal landmark \else 动物标记点 \endif
 } NvsObjectLandmarkType;
 
+typedef enum
+{
+    NvsObjectActionType_Face_Detect = 0x00000001L,              //!< \if ENGLISH face detected \else 检测到脸 \endif
+    NvsObjectActionType_Face_Lips_Upward = 0x00000040L,              //!< \if ENGLISH lips upward \else 嘴角上扬 \endif
+    NvsObjectActionType_Face_Lips_Pouted = 0x00000080L,           //!< \if ENGLISH face lips pouted \else 嘟嘴 \endif
+    NvsObjectActionType_Eye_Blink = 0x00000002L,        //!< \if ENGLISH eye blink \else 眨眼 \endif
+    NvsObjectActionType_Mouth_Ah = 0x00000004L,   //!< \if ENGLISH mouth open \else 嘴巴大张 \endif
+    NvsObjectActionType_Head_Yaw = 0x00000008L,   //!< \if ENGLISH head yaw \else 摇头 \endif
+    NvsObjectActionType_Head_Pitch = 0x00000010L,   //!< \if ENGLISH head pitch \else 点头 \endif
+    NvsObjectActionType_Brow_Jump = 0x00000020L,  //!< \if ENGLISH brow jump \else 眉毛挑动 \endif
+
+    NvsObjectActionType_Hand_Detect = 0x00000100L,              //!< \if ENGLISH hand detected \else 检测到手 \endif
+    NvsObjectActionType_Hand_OK = 0x00000200L,              //!< \if ENGLISH ok hand \else OK手势 \endif
+    NvsObjectActionType_Hand_Scissor = 0x00000400L,           //!< \if ENGLISH scissor hand \else 剪刀手 \endif
+    NvsObjectActionType_Hand_Good = 0x00000800L,        //!< \if ENGLISH good hand \else 大拇哥 \endif
+    NvsObjectActionType_Hand_Palm = 0x00001000L,   //!< \if ENGLISH hand palm \else 手掌 \endif
+    NvsObjectActionType_Hand_Pistol = 0x00002000L,  //!< \if ENGLISH pistol hand \else 手枪手势 \endif
+    NvsObjectActionType_Hand_Love = 0x00004000L,              //!< \if ENGLISH love hand \else 爱心手势 \endif
+    NvsObjectActionType_Hand_Holdup = 0x00008000L,              //!< \if ENGLISH holdup hand \else 托手手势 \endif
+    NvsObjectActionType_Hand_Congratulate = 0x00020000L,           //!< \if ENGLISH congratulate hand \else 恭贺（抱拳) \endif
+    NvsObjectActionType_Hand_Finger_Heart = 0x00040000L,        //!< \if ENGLISH finger heart \else 单手比爱心 \endif
+    NvsObjectActionType_Hand_Finger_Index = 0x00100000L,   //!< \if ENGLISH finger index \else 食指指尖 \endif
+    NvsObjectActionType_Hand_Fist = 0x00200000L,  //!< \if ENGLISH fist \else  拳头手势\endif
+    NvsObjectActionType_Hand_666 = 0x00400000L,              //!< \if ENGLISH 666 hand \else 666 \endif
+    NvsObjectActionType_Hand_Bless = 0x00800000L,              //!< \if ENGLISH bless \else 双手合十 \endif
+    NvsObjectActionType_Hand_ILoveYou = 0x010000000000L,           //!< \if ENGLISH  i love you \else 手势ILoveYou \endif
+    NvsObjectActionType_Hand_Ssh = 0x400000000000L        //!< \if ENGLISH shush \else  手势嘘\endif
+}NvsObjectDetectActionType;
+
 @protocol NvsARFaceContextDelegate <NSObject>
 @optional
 
@@ -78,6 +107,14 @@ typedef enum
  */
 - (void)notifyObjectLandmark:(NSArray*)landmark size:(int)landmarkSize type:(NvsObjectLandmarkType)type timeStamp:(int64_t)timestamp;
 
+    /*! \if ENGLISH
+     *  \brief Notifies the detected of hand/face action type.
+     *  \param face/hand action type ref [ACTION_TYPE_XXX]
+     *  \else
+     *  \brief 通知检测到的人脸/手部动作。ref [ACTION_TYPE_XXX]
+     *  \endif
+     */
+- (void)notifyDetectedAction:(long long)actionType ;
 @end
 
 /*!

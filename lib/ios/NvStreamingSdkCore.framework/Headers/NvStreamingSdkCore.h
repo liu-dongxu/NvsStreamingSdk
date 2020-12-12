@@ -52,5 +52,6 @@
 #import "NvsVideoTransition.h"
 #import "NvsMediaFileConvertor.h"
 #import "NvsMaskRegionInfo.h"
+#import "NvsHumanDetectionHandle.h"
 
 #endif /* Header_h */

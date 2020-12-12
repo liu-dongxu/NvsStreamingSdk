@@ -29,6 +29,8 @@ typedef enum {
     DetectionFlag_SupportFaceExtraDetect = 8,           //!< \if ENGLISH Detectes face extra \else 检测人脸扩展点 \endif
     DetectionFlag_SupportEyeballCenterDetect = 16,       //!< \if ENGLISH Detectes eyeball center \else 检测眼球中心 \endif
     DetectionFlag_SupportEyeballContourDetect = 32,      //!< \if ENGLISH Detectes eyeball contour \else 检测眼球四周 \endif
+    DetectionFlag_SupportFaceActionDetect = 128,         //!< \if ENGLISH Detectes face action \else 启动检测人脸动作 \endif
+    DetectionFlag_SupportHandActionDetect = 256,         //!< \if ENGLISH Detectes hand action \else 启动检测手部动作 \endif
 } DetectionFlag;
 
 /*! \if ENGLISH

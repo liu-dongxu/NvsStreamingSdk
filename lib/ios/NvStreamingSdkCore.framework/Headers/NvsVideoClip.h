@@ -489,6 +489,52 @@ NVS_EXPORT @interface NvsVideoClip : NvsClip
 - (BOOL)isOriginalRender;
 
 /*! \if ENGLISH
+ *  \brief Sets the clip's hdr enable status.
+ *  \param enable enable status.
+ *  \warning This interface will cause the streaming engine state to jump to the engine stop state, please refer to [Engine Change Feature] (\ref EngineChange.md) for details.
+ *  \else
+ *  \brief 设置片段静帧效果开启状态
+ *  \param enable 是否开启
+ *  \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
+ *  \endif
+ *  \since 2.18
+ *  \sa isClipFreenzeFrameEnabled
+ */
+- (void)enableClipFreezeFrame:(BOOL)enable;
+
+/*! \if ENGLISH
+ *  \brief Gets video freeze frame enabled.
+ *  \else
+ *  \brief 获取静帧效果是否开启
+ *  \endif
+ *  \since 2.18
+ */
+- (BOOL)isClipFreezeFrameEnabled;
+
+/*! \if ENGLISH
+ *  \brief Sets the clip's freeze trim position.
+ *  \param trimPos freeze trim position(in microseconds).
+ *  \warning This interface will cause the streaming engine state to jump to the engine stop state, please refer to [Engine Change Feature] (\ref EngineChange.md) for details.
+ *  \else
+ *  \brief 设置片段静帧效果位置
+ *  \param trimPos 静帧位置（单位微秒）
+ *  \warning 此接口会引发流媒体引擎状态跳转到引擎停止状态，具体情况请参见[引擎变化专题] (\ref EngineChange.md)。
+ *  \endif
+ *  \since 2.18
+ *  \sa isClipFreenzeFrameEnabled
+ */
+- (void)setClipFreezeFrameTrimPosition:(long)trimPos;
+
+/*! \if ENGLISH
+ *  \brief Gets video freeze trim position(in microseconds).
+ *  \else
+ *  \brief 获取静帧位置（单位微秒）
+ *  \endif
+ *  \since 2.18
+ */
+- (long)getClipFreezeFrameTrimPosition;
+
+/*! \if ENGLISH
  *  \brief Appends the built-in effect on the clip.
  *  \param fxName The effect name,if users get the video effect name, please refer to [getAllBuiltinVideoFxNames()] (@ref NvsStreamingContext::getAllBuiltinVideoFxNames) or [The List of Built-in Effect Name] (\ref FxNameList.md)
  *  \return Returns the appended NvsVideoFx object.

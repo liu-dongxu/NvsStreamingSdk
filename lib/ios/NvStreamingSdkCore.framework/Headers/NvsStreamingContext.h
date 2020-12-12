@@ -20,7 +20,7 @@
 #import "NvsVideoFrameReceiver.h"
 #import "NvsCustomVideoFx.h"
 #import "NvsCommonDef.h"
-
+@class NvsHumanDetectionHandle;
 
 /*! \if ENGLISH
  *  \brief Streaming context creation flag
@@ -35,6 +35,8 @@ typedef enum {
     NvsStreamingContextFlag_Support16KEdit = 128,                         //!< \if ENGLISH Supports up to 16K (images only). \else 支持16K编辑(仅图片) \endif
     NvsStreamingContextFlag_EnableCaptionContextCacheLimit = 1024,        //!< \if ENGLISH Enable max cache cont limit of caption \else 开启最大字幕缓存限制 \endif
     NvsStreamingContextFlag_DisableCapture = 2048,                        //!< \if ENGLISH Disable capture \else 采集设备不可用 \endif
+    NvsStreamingContextFlag_PlaybackDropFrameMode = 4096,                 //!< \if ENGLISH Drop frame mode in playback timeline \else 播放时间线的时候启用丢帧模式 \endif
+    NvsStreamingContextFlag_NeedGifMotion = 8192,                         //!< \if ENGLISH Need gif motion in playback timeline \else 播放时间线的时候需要GIF运动 \endif
 } NvsStreamingContextFlag;
 
 /*! \if ENGLISH
@@ -195,7 +197,8 @@ typedef enum
     NvsStreamingEngineRecordingFlag_VideoIntraFrameOnly = 2,  //!< \if ENGLISH Records a video file containing I-Frame only. \else 录制仅包含I-Frame的视频文件 \endif
     NvsStreamingEngineRecordingFlag_OnlyRecordVideo = 16,     //!< \if ENGLISH Records only video stream. \else 仅录制视频流 \endif
     NvsStreamingEngineRecordingFlag_IgnoreVideoRotation = 32,  //!< \if ENGLISH Ignores video device rotation while recording. Remark：it has only effects when using the method of "startRecordingWithFx:". \else 录制时不根据设备的手持方向对视频做旋转。注意：必须用startRecordingWithFx进行录制才有效果 \endif
-    NvsStreamingEngineRecordingFlag_WithoutFxUseStreamingWriter = 256  //!< \if ENGLISH Video record without fx that be streaming writer used. Remark：it has only effects when using the method of "startRecording:". \else 使用StreamingWirter进行不带特效录制。注意：必须用startRecording进行录制才有效果 \endif
+    NvsStreamingEngineRecordingFlag_WithoutFxUseStreamingWriter = 256,  //!< \if ENGLISH Video record without fx that be streaming writer used. Remark：it has only effects when using the method of "startRecording:". \else 使用StreamingWirter进行不带特效录制。注意：必须用startRecording进行录制才有效果 \endif
+    NvsStreamingEngineRecordingFlag_FlipHorizontally = 512  //!< \if ENGLISH Flip horizontally input video frame \else 镜像输入视频帧 \endif
 } NvsStreamingEngineRecordingFlag;
 
 /*! \if ENGLISH
@@ -233,7 +236,8 @@ typedef enum {
 typedef enum {
     NvsStreamingEnginePlaybackFlag_LowPipelineSize = 8,               //!< \if ENGLISH Reduces the internal pipeline size of the engine during playback. \else 降低引擎在播放时内部的流水线尺寸 \endif
     NvsStreamingEnginePlaybackFlag_DisableFixedPrerollTime = 16,      //!< \if ENGLISH Reduces the engine's playback delay of the first frame during playback. \else 降低引擎在播放时首帧的播出延迟 \endif
-    NvsStreamingEnginePlaybackFlag_BuddyHostVideoFrame = 32           //!< \if ENGLISH Buddy video frame in host. \else 伴侣视频帧 \endif
+    NvsStreamingEnginePlaybackFlag_BuddyHostVideoFrame = 32,           //!< \if ENGLISH Buddy video frame in host. \else 伴侣视频帧 \endif
+    NvsStreamingEnginePlaybackFlag_SpeedCompMode = 512           //!< \if ENGLISH Playback with speed compensation \else 速度补偿模式 \endif
 } NvsStreamingEnginePlaybackFlag;
 
 /*! \if ENGLISH
@@ -260,7 +264,8 @@ typedef enum {
     NvsHumanDetectionFeature_ImageMode = 16,
     NvsHumanDetectionFeature_MultiThread = 32,
     NvsHumanDetectionFeature_SingleThread = 64,
-    NvsHumanDetectionFeature_Extra = 128
+    NvsHumanDetectionFeature_Extra = 128,
+    NvsHumanDetectionFeature_Background = 256
 } NvsHumanDetectionFeatureFlag;
 
 /*! \if ENGLISH
@@ -273,6 +278,20 @@ typedef enum {
     NvsHumanDetectionDataType_FakeFace = 0,
     NvsHumanDetectionDataType_Makeup
 } NvsHumanDetectionDataTypeFlag;
+
+/*! \if ENGLISH
+ *  \brief Hardware error type
+ *  \else
+ *  \brief 硬件错误类型
+ *  \endif
+*/
+typedef enum {
+    NvsStreamingEngineHarwareErrorType_Video_Encoder_Setup_Error = 0,
+    NvsStreamingEngineHarwareErrorType_Video_Encoding_Error,
+    NvsStreamingEngineHarwareErrorType_Video_Decoder_Setup_Error,
+    NvsStreamingEngineHarwareErrorType_Video_Decoding_Error
+} NvsStreamingEngineHarwareErrorType;
+
 
 /*! \anchor RECORD_CONFIGURATIONS */
 /*!
@@ -649,6 +668,19 @@ typedef enum {
 */
 - (void)capturePictureArrived:(NvsVideoFrameInfo*)sampleBufferInfo;
 
+/*! \if ENGLISH
+ *  \brief Timeline playback exception information.
+ *  \param errorType Type of hardware error, please refert to [NvsStreamingEngineHarwareErrorType](@ref NvsStreamingEngineHarwareErrorType)
+ *  \param stringInfo Assistance information.
+ *  \else
+ *  \brief 时间线播放异常信息
+ *  \param errorType 硬件错误类型,请参见[硬件错误类型](@ref NvsStreamingEngineHarwareErrorType)
+ *  \param stringInfo 辅助的字符串信息
+ *  \endif
+ *  \since 1.16.0
+ */
+- (void)onHardwareError:(NvsStreamingEngineHarwareErrorType)errorType stringInfo:(NSString*)stringInfo;
+
 @end
 
 @protocol NvsImageGrabberDelegate <NSObject>
@@ -870,6 +902,60 @@ NVS_EXPORT @interface NvsStreamingContext : NSObject
  *  \since 2.5.0
 */
 + (void)closeHumanDetection;
+
+/*! \if ENGLISH
+ *  \brief Preload effect resources.
+ *  \else
+ *  \brief 预加载特技资源
+ *  \endif
+ *  \since 2.18.1
+ */
+- (BOOL)preloadEffectResources;
+
+/*! \if ENGLISH
+ *  \brief Creates human detection handle
+ *  \param modelFilePath The path of face modle file.
+ *  \param licenseFilePath The path of authorization file.
+ *  \param config Human detection configuration, please refer to [HUMAN_DETECTION_FEATURE_FACE_LANDMARK].
+ *  \return Returns handle created
+ *  \else
+ *  \brief 创建人体检测句柄
+ *  \param modelFilePath 模型文件路径
+ *  \param licenseFilePath 授权文件路径
+ *  \param features 人体检测特征标志字段。请参见[人体检测特征](@ref HUMAN_DETECTION_FEATURE_FACE_LANDMARK)
+ *  \return 返回创建的句柄
+ *  \endif
+ *  \sa destroyHumanDetectionHandle:
+ */
+- (NvsHumanDetectionHandle*)createHumanDetectionHandle:(NSString*)modelFilePath licenseFilePath:(NSString*)licenseFilePath config:(int64_t)config;
+
+/*! \if ENGLISH
+ *  \brief Extends human detection handle
+ *  \param handle Human detection handle to be extended.
+ *  \param modelFilePath The path of extra modle file.
+ *  \param licenseFilePath The path of authorization file.
+ *  \param config Human detection configuration, please refer to [HUMAN_DETECTION_FEATURE_FACE_LANDMARK].
+ *  \return Returns a boolean value. true for success, false for failure.
+ *  \else
+ *  \param handle 需要功能扩展的人体检测句柄.
+ *  \param modelFilePath 扩展模型文件路径
+ *  \param licenseFilePath 授权文件路径
+ *  \param features 人体检测特征标志字段。请参见[人体检测特征](@ref HUMAN_DETECTION_FEATURE_FACE_LANDMARK)
+ *  \return 成功返回true, 失败返回false.
+ *  \endif
+ */
+- (BOOL)ExtendHumanDetectionHandle:(NvsHumanDetectionHandle *)handle modelFilePath:(NSString *)modelFilePath licenseFilePath:(NSString *)licenseFilePath config:(int64_t)config;
+
+/*! \if ENGLISH
+ *  \brief Destroy human detection handle
+ *  \param handle Human detection handle to be destroyed.
+ *  \else
+ *  \brief 销毁人体检测句柄
+ *  \param handle 需要销毁的人体检测句柄.
+ *  \endif
+ *  \sa createHumanDetectionHandle
+ */
+- (BOOL)destroyHumanDetectionHandle:(NvsHumanDetectionHandle *)handle;
 
 /*! \if ENGLISH
  *  \brief Gets the directory path of log file.
@@ -1117,6 +1203,42 @@ NVS_EXPORT @interface NvsStreamingContext : NSObject
  *  \sa pauseCompiling
  */
 - (BOOL)isCompilingPaused;
+
+/*! \if ENGLISH
+ *  \brief Pause playback timeline
+ *  \return Returns a boolean value indicating whether the pause was successful
+ *  \else
+ *  \brief 暂停播放时间线
+ *  \return 返回布尔值表示暂停是否成功
+ *  \endif
+ *  \since 2.18.0
+ *  \sa resumeCompiling
+ */
+- (BOOL)pausePlayback;
+
+/*! \if ENGLISH
+*  \brief Resume playback timeline
+ *  \return Returns a boolean value indicating whether the resume was successful
+ *  \else
+ *  \brief 恢复播放时间线
+ *  \return 返回布尔值表示恢复是否成功
+ *  \endif
+ *  \since 2.18.0
+ *  \sa pausePlayback
+ */
+- (BOOL)resumePlayback;
+
+/*! \if ENGLISH
+ *  \brief Check if playback timeline is paused
+ *  \return Returns a boolean value indicating whether compiling timeline is paused
+ *  \else
+ *  \brief 检查播放时间线是否暂停了
+ *  \return 返回布尔值表示播放时间线是否暂停了
+ *  \endif
+ *  \since 2.18.0
+ *  \sa pauseCompiling
+ */
+- (BOOL)isPlaybackPaused;
 
 /*! \if ENGLISH
  *  \brief Sets the customized height for video.
@@ -2381,6 +2503,18 @@ NVS_EXPORT @interface NvsStreamingContext : NSObject
  *  \endif
 */
 + (void)setMaxReaderCount:(int)count;
+/*! \endcond */
+
+/*! \cond */
+/*! \if ENGLISH
+ *  \brief set max icon reader count.
+ *  \param max count the icon reader
+ *  \else
+ *  \brief 设置 icon reader 最大个数。
+ *  \param icon reader 最大个数
+ *  \endif
+*/
++ (void)setMaxIconReaderCount:(int)count;
 /*! \endcond */
 
 /*! \cond */

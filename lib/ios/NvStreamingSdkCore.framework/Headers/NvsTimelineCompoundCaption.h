@@ -59,6 +59,7 @@ NVS_EXPORT @interface NvsTimelineCompoundCaption : NvsFx
 
 @property (readonly) int64_t inPoint;                 //!< \if ENGLISH The in point of the caption on the timeline(in microseconds) \else 字幕在时间线上显示的入点（单位微秒） \endif
 @property (readonly) int64_t outPoint;                //!< \if ENGLISH The out point of the caption on the timeline (in microseconds) \else 字幕在时间线显示上的出点（单位微秒） \endif
+@property (readonly) NSString* captionStylePackageId; //!< \if ENGLISH The package ID of the caption style\else 字幕样式包裹ID \endif
 
 /*! \if ENGLISH
  *  \brief Changes the in-point of the caption on the timeline.
