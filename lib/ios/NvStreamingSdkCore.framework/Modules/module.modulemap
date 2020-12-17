@@ -1,4 +1,5 @@
-module NvStreamingSdkCore [system] {
-    header "NvStreamingSdkCore.h"
+framework module NvStreamingSdkCore {
+    umbrella header "NvStreamingSdkCore.h"
     export *
+    module * { export * }
 }
